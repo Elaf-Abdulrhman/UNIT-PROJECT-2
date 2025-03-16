@@ -1,0 +1,26 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Spaceify - Upload Image{% endblock %}
+{% block content %}
+    <h1>Upload Your Room Picture</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="room_image" accept="image/*" required>
+        <button type="submit">Upload Image</button>
+    </form>
+
+    {% if image_url %}
+        <h2>Uploaded Image:</h2>
+        <img src="{{ image_url }}" alt="Uploaded Room Image">
+    {% endif %}
+
+    {% if recommendations %}
+        <h2>Room Recommendations:</h2>
+        <ul>
+            {% for recommendation in recommendations %}
+                <li>{{ recommendation }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

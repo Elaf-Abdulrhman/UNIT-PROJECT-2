@@ -1,0 +1,123 @@
+* {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    font-size: medium;
+    background-color: #141C28;
+    color: #ffffff;
+}
+
+/* Navigation Bar */
+nav {
+    padding: 10px 0;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.nav-container .logo img {
+    width: 170px;
+}
+
+.nav-container ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.nav-container ul li {
+    margin-left: 20px;
+}
+
+.nav-container ul li a {
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.nav_list {
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.login-btn, .signup-btn {
+    padding: 10px 20px;
+    background-color: #f1f1f1;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none;
+    color: #000;
+    margin-right: 10px;
+}
+
+.btn-container{
+    display: flex;
+    align-items: center;
+    margin-right: 30px;
+}
+
+
+/* Modal Styles */
+.auth-modal {
+    display: none; /* Initially hidden */
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Background overlay */
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.auth-modal-content h2 {
+    text-align: center;
+}
+
+.auth-modal .auth-form {
+    display: none; /* Hide forms initially */
+}
+
+.auth-modal .auth-form.active {
+    display: block; /* Show active form */
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+/* Style the buttons for login and signup */
+.login-btn, .signup-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.login-btn:hover, .signup-btn:hover {
+    background-color: #0056b3;
+}

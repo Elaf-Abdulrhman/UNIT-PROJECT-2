@@ -1,0 +1,37 @@
+{% extends "main/base.html" %}
+{% load static %}
+<title>{% block title %}Spaceify - add room {% endblock %}</title>
+
+{% block content %}
+<div class="container">
+    <h1>Upload Your Room Picture</h1>
+    <input type="file" id="room-upload" accept="image/*">
+    <button onclick="getRecommendations()">Get Recommendations</button>
+    <div id="image-preview"></div>
+    <div id="recommendations"></div>
+  </div>
+
+  <script>
+    const imageInput = document.getElementById('room-upload');
+    const imagePreview = document.getElementById('image-preview');
+
+    imageInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const img = document.createElement('img');
+          img.src = reader.result;
+          imagePreview.innerHTML = '';  // Clear previous image
+          imagePreview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    function getRecommendations() {
+      // Placeholder for fetching recommendations based on image
+      alert("Getting recommendations for your room...");
+    }
+  </script>
+{% endblock %}

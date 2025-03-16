@@ -1,0 +1,75 @@
+{% extends "main/base.html" %}
+{% load static %}
+<title>{% block title %}Spaceify - home{% endblock %}</title>
+{% block content %}
+  <!-- Hero Section -->
+  <section id="hero" class="hero section">
+    <img src="assets/img/hero-bg.jpg" alt="" data-aos="fade-in">
+  </section><!-- /Hero Section -->
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container hero-content text-center">
+      <h1>Transform Your Space with Augmented Reality</h1>
+      <p>Upload your room photos and see how different furniture pieces fit in your space.</p>
+      <a href="{%url 'upload_image' %}" class="btn btn-primary">Try AR Design Now</a>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="container">
+      <h2>Key Features</h2>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <h3 class="card-title">AR Integration</h3>
+              <p class="card-text">Upload a photo of your room and visualize different furniture and decor items in real time with AR.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <h3 class="card-title">Product Catalog</h3>
+              <p class="card-text">Browse through our catalog of furniture and decor items, add them to your cart, and purchase directly.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <h3 class="card-title">Room Customization</h3>
+              <p class="card-text">Customize the layout, size, and color of furniture pieces in your room to match your style.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <h3 class="card-title">User Profiles</h3>
+              <p class="card-text">Create an account to save your designs and purchase items for a seamless shopping experience.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="testimonials">
+    <div class="container">
+      <h2>What Our Users Say</h2>
+      <div class="testimonial-item">
+        <p>"Spaceify helped me visualize my new furniture in my living room before making a purchase. It made shopping so much easier!"</p>
+        <cite>- Sarah L.</cite>
+      </div>
+      <div class="testimonial-item">
+        <p>"I love how easy it is to upload my room photos and see how different styles of furniture look in my space!"</p>
+        <cite>- John D.</cite>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}
