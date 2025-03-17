@@ -7,7 +7,7 @@
     color: #ffffff;
 }
 
-/* Navigation Bar */
+/* Navigation Bar background-color: #141C28; */
 nav {
     padding: 10px 0;
 }
@@ -122,3 +122,30 @@ nav {
     display: none;  /* Hide the sign-up form by default */
 }
 
+.footer-divider{
+    border-top: 1px solid #a15c5c;
+    background: #141C28;
+    margin: 20px 0;
+}
+
+/* Default light mode styles 
+body {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+/* Dark mode styles 
+body.dark-mode {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+/* Additional styles for other elements in dark mode 
+body.dark-mode .navbar, body.dark-mode .footer {
+    background-color: #333333;
+}
+
+body.dark-mode .btn {
+    background-color: #444444;
+    color: #ffffff;
+}*/
