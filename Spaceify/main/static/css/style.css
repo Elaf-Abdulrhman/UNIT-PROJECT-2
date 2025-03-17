@@ -64,60 +64,61 @@ nav {
     margin-right: 30px;
 }
 
-
-/* Modal Styles */
-.auth-modal {
-    display: none; /* Initially hidden */
+.modal {
+    display: none;  /* Initially hidden */
     position: fixed;
-    z-index: 9999;
+    z-index: 1;  /* Sit on top */
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Background overlay */
-    justify-content: center;
-    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);  /* Semi-transparent background */
 }
 
-.auth-modal-content {
+.modal-content {
     background-color: #fff;
+    margin: 15% auto;
     padding: 20px;
-    border-radius: 8px;
-    width: 400px;
-    max-width: 90%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.auth-modal-content h2 {
-    text-align: center;
-}
-
-.auth-modal .auth-form {
-    display: none; /* Hide forms initially */
-}
-
-.auth-modal .auth-form.active {
-    display: block; /* Show active form */
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px;
 }
 
 .close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 30px;
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    text-decoration: none;
     cursor: pointer;
 }
 
-/* Style the buttons for login and signup */
-.login-btn, .signup-btn {
-    padding: 10px 20px;
+.form-container {
+    margin-bottom: 20px;
+}
+
+.form-container h2 {
+    margin-bottom: 15px;
+}
+
+.btn {
     background-color: #007bff;
-    color: white;
+    color: #fff;
     border: none;
-    border-radius: 5px;
+    padding: 10px;
     cursor: pointer;
 }
 
-.login-btn:hover, .signup-btn:hover {
+.btn:hover {
     background-color: #0056b3;
 }
+
+#signup-form {
+    display: none;  /* Hide the sign-up form by default */
+}
+

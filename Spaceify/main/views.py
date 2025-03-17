@@ -1,22 +1,41 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-import requests
-from django.shortcuts import render
 from django.http import JsonResponse
 from django.core.files.storage import FileSystemStorage
 import os
+from django.contrib.auth import login, authenticate, logout
+from django.contrib import messages
+from .forms import CustomLoginForm, CustomSignUpForm
+import requests
 
 def home(request):
     return render(request, 'main/home.html')
 
-# In the view for login/signup
+# Login view
 def login_view(request):
-    form = AuthenticationForm()
-    return render(request, 'main/base.html', {'login_form': form})
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('home')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'main/home.html', {'login_form': form, 'signup_form': UserCreationForm()})
 
-def signup(request):
-    form = UserCreationForm()
-    return render(request, 'main/base.html', {'signup_form': form})
+# Sign Up view
+def signup_view(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = UserCreationForm()
+    return render(request, 'main/home.html', {'signup_form': form, 'login_form': AuthenticationForm()})
 
 def add_room(request):
     return render(request, 'main/add_room.html')
@@ -71,3 +90,7 @@ def upload_image(request):
         return JsonResponse({'recommendations': recommendations, 'image_url': file_url})
 
     return render(request, 'main/upload_image.html')
+
+def logout_view(request):
+    logout(request)
+    return redirect('home')
