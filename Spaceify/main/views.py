@@ -7,6 +7,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from .forms import CustomLoginForm, CustomSignUpForm
 import requests
+from urllib.parse import unquote
 
 def home(request):
     return render(request, 'main/home.html')
@@ -80,8 +81,11 @@ def upload_image(request):
         filename = fs.save(image_file.name, image_file)
         file_url = fs.url(filename)
         
+        # Decode the URL-encoded file path
+        decoded_file_url = unquote(file_url)
+        
         # Process the image using the DeepAI API
-        image_path = os.path.join(os.getcwd(), file_url[1:])
+        image_path = os.path.join(os.getcwd(), decoded_file_url[1:])
         labels = analyze_image(image_path)
         
         # Generate room recommendations based on the labels

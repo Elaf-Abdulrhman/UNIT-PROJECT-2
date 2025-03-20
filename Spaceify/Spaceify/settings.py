@@ -138,3 +138,6 @@ EMAIL_HOST_USER = 'ela45f@gmail.com'
 EMAIL_HOST_PASSWORD = 'vonw sbqs pwhs nyyo'
 DEFAULT_FROM_EMAIL = 'elafabdualrhman00@gmail.com'
 
+# Add these lines to your settings.py file
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

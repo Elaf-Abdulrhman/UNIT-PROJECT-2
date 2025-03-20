@@ -15,6 +15,10 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
 </head>
 
 <body>
@@ -29,10 +33,18 @@
                     <li><a href="#" class="add_plant">Add</a></li>
                 </ul>
                 <div class="btn-container">
+                    <div class="profile-menu">
                     {% if user.is_authenticated %}
-                        <span class="navbar-text">Logged in successfully as {{ user.username }}</span>
+                        <span class="navbar-text">
+                            <!-- Profile Icon + Dynamic Username -->
+                            <i class="fas fa-user"></i> {{ user.username }}
+                          </span>
+                          <!-- Dropdown menu for logout -->
+                            <div class="dropdown">
+                        <div class="dropdown-content">
                         <a href="{% url 'logout' %}" class="btn btn-primary">Logout</a>
                         <a href="#" class="btn btn-primary">Profile</a> <!-- might be deleted later -->
+                        </div>
                     {% else %}
                         <button class="login-btn btn btn-primary" id="loginBtn">Login</button>
                         <button class="signup-btn btn btn-primary" id="signupBtn">Sign Up</button>
@@ -97,7 +109,7 @@
                 <p>&copy; 2025 Spaceify. All Rights Reserved.</p>
                 <div class="social-links">
                 <div class="social-links">
-                    <a href="https://twitter.com" target="_blank"> 888 <i class="fab fa-twitter"></i></a>
+                    <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
                     <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
                     <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
                     <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a>

@@ -128,6 +128,74 @@ nav {
     margin: 20px 0;
 }
 
+.profile-menu {
+    display: inline-block;
+    position: relative; /* This will help position the dropdown */
+  }
+  
+  .navbar-text {
+    font-size: 18px; /* Font size for username */
+    color: white;
+    display: flex;
+    align-items: center; /* Align the icon and username in the center */
+    cursor: pointer; /* Change cursor to pointer */
+  }
+  
+  .navbar-text i {
+    margin-right: 8px; /* Space between the icon and username */
+    font-size: 22px; /* Icon size */
+  }
+  
+  /* Dropdown styles */
+  .dropdown {
+    position: absolute;
+    top: 100%; /* Position below the username */
+    right: 0;
+    display: none; /* Hide the dropdown initially */
+    background-color: #333;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+  }
+  
+  .dropdown-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .dropdown-content a {
+    color: white;
+    padding: 10px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .dropdown-content a:hover {
+    background-color: #575757; /* Change background color on hover */
+  }
+  
+  /* Show dropdown when hovering over the profile-menu */
+  .profile-menu:hover .dropdown {
+    display: block;
+  }
+  
+
+@media (max-width: 600px) {
+    header {
+      font-size: 18px;
+      padding: 10px;
+    }
+  
+    .content {
+      font-size: 14px;
+      padding: 10px;
+    }
+  
+    footer {
+      font-size: 14px;
+      padding: 10px;
+    }
+  }
+
 /* Default light mode styles 
 body {
     background-color: #ffffff;
