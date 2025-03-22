@@ -141,3 +141,5 @@ DEFAULT_FROM_EMAIL = 'elafabdualrhman00@gmail.com'
 # Add these lines to your settings.py file
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+DEEPAI_API_KEY = 'd6c7ea35-eb4a-4daf-b005-91fe62c367b6'

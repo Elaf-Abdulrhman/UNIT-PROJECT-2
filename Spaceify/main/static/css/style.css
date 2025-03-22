@@ -7,9 +7,10 @@
     color: #ffffff;
 }
 
-/* Navigation Bar background-color: #141C28; */
+/* Navigation Bar */
 nav {
     padding: 10px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for 3D effect */
 }
 
 .nav-container {
@@ -39,23 +40,47 @@ nav {
 .nav-container ul li a {
     text-decoration: none;
     font-size: 16px;
+    color: #ffffff; /* White text color */
+    padding: 10px 15px;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.nav-container ul li a:hover {
+    background-color: #007bff; /* Background color on hover */
+    color: #ffffff; /* Text color on hover */
+    border-radius: 5px; /* Rounded corners on hover */
 }
 
 .nav_list {
     text-decoration: none;
     font-size: 16px;
+    color: #ffffff; /* White text color */
+    padding: 10px 15px;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.nav_list:hover {
+    background-color: #007bff; /* Background color on hover */
+    color: #ffffff; /* Text color on hover */
+    border-radius: 5px; /* Rounded corners on hover */
 }
 
 .login-btn, .signup-btn {
     padding: 10px 20px;
-    background-color: #f1f1f1;
+    background-color: #007bff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
     text-decoration: none;
-    color: #000;
+    color: #ffffff; /* White text color */
     margin-right: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.login-btn:hover, .signup-btn:hover {
+    background-color: #0056b3; /* Darker background color on hover */
+    color: #ffffff; /* White text color on hover */
 }
 
 .btn-container{
@@ -64,6 +89,7 @@ nav {
     margin-right: 30px;
 }
 
+/* Modal styles */
 .modal {
     display: none;  /* Initially hidden */
     position: fixed;
@@ -73,15 +99,24 @@ nav {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);  /* Semi-transparent background */
+    overflow: auto; /* Enable scrolling if needed */
 }
 
 .modal-content {
-    background-color: #fff;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 400px;
+    background-color: #ffffff; /* Background color */
+    margin: 10% auto; /* Center the modal */
+    padding: 20px; /* Padding inside the modal */
+    border: 0.2px solid #888; /* Border color */
+    width: 80%; /* Width of the modal */
+    max-width: 500px; /* Maximum width of the modal */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for 3D effect */
+    animation: fadeIn 0.3s ease; /* Fade-in animation */
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
 }
 
 .close-btn {
@@ -89,13 +124,13 @@ nav {
     float: right;
     font-size: 28px;
     font-weight: bold;
+    cursor: pointer; /* Change cursor to pointer */
 }
 
 .close-btn:hover,
 .close-btn:focus {
-    color: black;
+    color: #000;
     text-decoration: none;
-    cursor: pointer;
 }
 
 .form-container {
@@ -104,28 +139,31 @@ nav {
 
 .form-container h2 {
     margin-bottom: 15px;
+    color: #333333; /* Title color */
+}
+
+.form-container p {
+    margin-bottom: 15px;
+    color: #555555; /* Text color */
 }
 
 .btn {
     background-color: #007bff;
-    color: #fff;
+    color: #ffffff;
     border: none;
-    padding: 10px;
+    padding: 10px 20px;
     cursor: pointer;
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for hover effect */
 }
 
 .btn:hover {
-    background-color: #0056b3;
+    background-color: #0056b3; /* Darker background color on hover */
+    color: #ffffff; /* White text color on hover */
 }
 
 #signup-form {
     display: none;  /* Hide the sign-up form by default */
-}
-
-.footer-divider{
-    border-top: 1px solid #a15c5c;
-    background: #141C28;
-    margin: 20px 0;
 }
 
 .profile-menu {
@@ -193,22 +231,24 @@ nav {
     footer {
       font-size: 14px;
       padding: 10px;
+      
+
     }
   }
 
-/* Default light mode styles 
+/* Default light mode styles */
 body {
     background-color: #ffffff;
     color: #000000;
 }
 
-/* Dark mode styles 
+/* Dark mode styles */
 body.dark-mode {
     background-color: #000000;
     color: #ffffff;
 }
 
-/* Additional styles for other elements in dark mode 
+/* Additional styles for other elements in dark mode */
 body.dark-mode .navbar, body.dark-mode .footer {
     background-color: #333333;
 }
@@ -216,4 +256,192 @@ body.dark-mode .navbar, body.dark-mode .footer {
 body.dark-mode .btn {
     background-color: #444444;
     color: #ffffff;
-}*/
+}
+
+/* Footer styles */
+.footer-content {
+    padding: 20px 0;
+    background-color: #141C28;
+    color: #ffffff;
+}
+
+.footer-content h5 {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.footer-content p {
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.footer-content ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-content ul li {
+    margin-bottom: 10px;
+}
+
+.footer-content ul li a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.footer-content ul li a:hover {
+    text-decoration: underline;
+}
+
+.footer-content .social-links {
+    margin-top: 10px;
+}
+
+.footer-content .social-links a {
+    color: #ffffff;
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+.footer-content .social-links a:hover {
+    color: #1DA1F2; /* Twitter color */
+}
+
+
+.testimonial-item{
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+.testimonial-item {
+    color: #333333; /* Text color */
+    padding: 20px; /* Padding inside the testimonial */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for 3D effect */
+    border: 1px solid #e0e0e0; /* Border color */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effect */
+
+}
+
+.testimonial-item:hover {
+    transform: translateY(-5px); /* Slight lift on hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+}
+
+.testimonial-item h3 {
+    font-size: 20px; /* Font size for the title */
+    margin-bottom: 10px; /* Space below the title */
+    color: #007bff; /* Title color */
+}
+
+.testimonial-item p {
+    font-size: 16px; /* Font size for the content */
+    line-height: 1.6; /* Line height for readability */
+    margin-bottom: 15px; /* Space below the content */
+}
+
+.testimonial-item .author {
+    font-weight: bold; /* Bold font for the author */
+    font-size: 14px; /* Font size for the author */
+    color: #555555; /* Author color */
+}
+
+/* Testimonials Section */
+.testimonials {
+    padding: 40px 0;
+    text-align: center;
+}
+
+.testimonials h2 {
+    font-size: 28px;
+    margin-bottom: 30px;
+    color: #333333;
+}
+
+.testimonial-item {
+    color: #333333; /* Text color */
+    padding: 20px; /* Padding inside the testimonial */
+    border-radius: 10px; /* Rounded corners */
+    margin: 20px 0; /* Margin outside the testimonial */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for 3D effect */
+    border: 1px solid #e0e0e0; /* Border color */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.testimonial-item:hover {
+    transform: translateY(-5px); /* Slight lift on hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+}
+
+.testimonial-item h3 {
+    font-size: 20px; /* Font size for the title */
+    margin-bottom: 10px; /* Space below the title */
+    color: #007bff; /* Title color */
+}
+
+.testimonial-item p {
+    font-size: 16px; /* Font size for the content */
+    line-height: 1.6; /* Line height for readability */
+    margin-bottom: 15px; /* Space below the content */
+}
+
+.testimonial-item .author {
+    font-weight: bold; /* Bold font for the author */
+    font-size: 14px; /* Font size for the author */
+    color: #555555; /* Author color */
+}
+
+/* Upload Image Page Styles */
+.upload-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for 3D effect */
+    text-align: center;
+}
+
+.upload-container h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #333333;
+}
+
+.upload-form {
+    margin-bottom: 20px;
+}
+
+.form-control-file {
+    display: block;
+    margin: 0 auto 20px auto;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.uploaded-image {
+    max-width: 100%;
+    height: auto;
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for 3D effect */
+}
+
+.recommendations-list {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.recommendations-list li {
+    background-color: #ffffff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Box shadow for 3D effect */
+    color: #333333;
+}
+
