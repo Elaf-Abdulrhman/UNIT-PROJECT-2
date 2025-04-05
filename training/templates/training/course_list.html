@@ -1,0 +1,28 @@
+{% extends 'training/base.html' %}
+{% load static %}
+{% block title %}My Courses{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>My Courses</h1>
+    <a href="{% url 'course_add' %}" class="btn btn-primary mb-3">Add New Course</a>
+    <div class="card">
+        {% for course in courses %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h3>{{ course.title }}</h3>
+                <p>{{ course.description }}</p>
+                <p><strong>Start Date:</strong> {{ course.start_date }}</p>
+                <p><strong>End Date:</strong> {{ course.end_date }}</p>
+                {% if course.materials %}
+                <p><a href="{{ course.materials.url }}" target="_blank">Download Materials</a></p>
+                {% endif %}
+                <a href="{% url 'course_edit' course.pk %}" class="btn btn-warning">Edit</a>
+                <a href="{% url 'course_delete' course.pk %}" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+        {% empty %}
+        <p>No courses available.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

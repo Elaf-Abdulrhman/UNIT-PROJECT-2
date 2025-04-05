@@ -1,0 +1,21 @@
+<!-- training_dashboard.html -->
+
+{% extends 'training/base.html' %}
+
+{% load static %}
+{% block content %}
+  <h2>Training Dashboard</h2>
+  <p>Here are the available training modules and your progress:</p>
+  <ul>
+    {% for module in training_modules %}
+      <li>
+        <a href="{% url 'video_page' module.id %}">{{ module.title }}</a>
+        {% if module in progress %}
+          <span>Completed</span>
+        {% else %}
+          <span>Not Completed</span>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

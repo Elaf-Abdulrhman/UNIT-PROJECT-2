@@ -1,0 +1,35 @@
+{% extends 'training/base.html' %}
+{% block title %}About PetroTrain{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="card">
+        <h1>About PetroTrain</h1>
+        <p><strong>Our Mission:</strong> PetroTrain is dedicated to providing cutting-edge training solutions for the oil and gas industry. We aim to empower professionals with the knowledge and skills needed to excel in a rapidly evolving sector.</p>
+    </div>
+
+    <div class="card">
+        <h3>Who We Are</h3>
+        <p>PetroTrain is a platform designed to deliver interactive and immersive training experiences. By leveraging modern technologies such as virtual reality, 360-degree videos, and interactive modules, we ensure that employees are well-prepared for real-world challenges.</p>
+    </div>
+
+    <div class="card">
+        <h3>What We Offer</h3>
+        <ul>
+            <li>Comprehensive training on drilling rig operations</li>
+            <li>Safety protocols for hazardous environments</li>
+            <li>Maintenance and troubleshooting of specialized equipment</li>
+            <li>Emergency response training</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h3>Why Choose PetroTrain?</h3>
+        <p>Our platform combines industry expertise with innovative technology to create a safe, effective, and engaging learning environment. We are committed to helping organizations enhance productivity and safety standards.</p>
+    </div>
+
+    <div class="card">
+        <h3>Contact Us</h3>
+        <p>If you have any questions or would like to learn more about PetroTrain, feel free to <a href="{% url 'contact' %}">contact us</a>.</p>
+    </div>
+</div>
+{% endblock %}
