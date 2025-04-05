@@ -22,6 +22,11 @@ def register(request):
 class CustomLoginView(LoginView):
     template_name = 'training/login.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('home')  # Redirect to home if the user is already logged in
+        return super().dispatch(request, *args, **kwargs)
+
 @login_required
 def profile(request):
     user = request.user  # Get the logged-in user
@@ -85,12 +90,12 @@ def course_add(request):
         form = CourseForm(request.POST, request.FILES)
         if form.is_valid():
             course = form.save(commit=False)
-            course.trainer = request.user
+            course.trainer = request.user  # Assign the logged-in user as the trainer
             course.save()
-            return redirect('course_list')
+            return redirect('course_list')  # Redirect to the course list after saving
     else:
         form = CourseForm()
-    return render(request, 'training/course_form.html', {'form': form})
+    return render(request, 'training/course_add.html', {'form': form})
 
 @login_required
 def course_edit(request, pk):
@@ -111,3 +116,21 @@ def course_delete(request, pk):
         course.delete()
         return redirect('course_list')
     return render(request, 'training/course_confirm_delete.html', {'course': course})
+
+@login_required
+def progress_tracking(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    enrolled_employees = course.enrolled_employees.all()
+    return render(request, 'training/progress_tracking.html', {'course': course, 'enrolled_employees': enrolled_employees})
+
+def home(request):
+    return render(request, 'training/home.html')
+
+def courses(request):
+    courses = Course.objects.all()
+    return render(request, 'training/courses.html', {'courses': courses})
+
+def courses(request, pk):
+    course = get_object_or_404(Course, pk=pk)
+    return render(request, 'training/course_detail.html', {'course': course})
+

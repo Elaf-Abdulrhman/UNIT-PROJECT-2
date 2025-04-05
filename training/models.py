@@ -94,14 +94,18 @@ class UserProgress(models.Model):
     test_score = models.IntegerField(null=True, blank=True)
     date_started = models.DateTimeField(auto_now_add=True)
 
-# Course Model
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
 class Course(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
-    trainer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='courses')
     start_date = models.DateField()
     end_date = models.DateField()
     materials = models.FileField(upload_to='course_materials/', blank=True, null=True)
+    enrolled_employees = models.ManyToManyField(User, related_name='enrolled_courses', blank=True)
+    trainer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='courses')
 
     def __str__(self):
         return self.title

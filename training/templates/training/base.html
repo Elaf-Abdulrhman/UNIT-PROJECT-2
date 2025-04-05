@@ -20,6 +20,16 @@
                 <a href="{% url 'dashboard' %}">Dashboard</a>
                 <a href="{% url 'about' %}">About us</a>
                 <a href="{% url 'contact' %}">Contact</a>
+
+                <!-- Dropdown Menu for Courses -->
+                <div class="dropdown">
+                    <a href="#" class="dropbtn">Courses</a>
+                    <div class="dropdown-content">
+                        <a href="{% url 'course_list' %}">View All Courses</a>
+                        <a href="{% url 'course_add' %}">Add New Course</a>
+                    </div>
+                </div>
+
                 {% if user.is_authenticated %}
                     <form method="post" action="{% url 'logout' %}" style="display: inline;">
                         {% csrf_token %}
