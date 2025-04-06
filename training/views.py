@@ -9,18 +9,14 @@ from .forms import (
     CourseForm,
     QuizForm,
     AssignmentForm,
-    InteractiveModuleForm,
     QuestionForm,
-    TrainingModuleForm,
 )
 from .models import (
     Quiz,
     QuizResult,
-    TrainingModule,
     Progress,
     Course,
     Assignment,
-    InteractiveModule,
     Question,
 )
 
@@ -63,24 +59,17 @@ def profile(request):
 
 
 # Homepage
-def homepage(request):
-    training_modules = TrainingModule.objects.all()
-    return render(request, 'training/home.html', {'training_modules': training_modules})
+def home(request):
+    courses = Course.objects.all()  # Retrieve all courses
+    return render(request, 'training/home.html', {'courses': courses})
 
 
 # Dashboard
 @login_required
 def dashboard(request):
     user = request.user
-    training_modules = TrainingModule.objects.all()
     progress = Progress.objects.filter(user=user)
-    return render(request, 'training/dashboard.html', {'training_modules': training_modules, 'progress': progress})
-
-
-# Video Page
-def video_page(request, module_id):
-    module = get_object_or_404(TrainingModule, id=module_id)
-    return render(request, 'training/video_page.html', {'module': module})
+    return render(request, 'training/dashboard.html', {'progress': progress})
 
 
 # Complete Quiz
@@ -149,14 +138,6 @@ def course_delete(request, pk):
         course.delete()
         return redirect('course_list')
     return render(request, 'training/course_confirm_delete.html', {'course': course})
-
-
-# Progress Tracking
-@login_required
-def progress_tracking(request, course_id):
-    course = get_object_or_404(Course, id=course_id)
-    enrolled_employees = course.enrolled_employees.all()
-    return render(request, 'training/progress_tracking.html', {'course': course, 'enrolled_employees': enrolled_employees})
 
 
 @login_required
@@ -237,55 +218,3 @@ def add_question(request, quiz_id):
     else:
         form = QuestionForm()
     return render(request, 'training/add_question.html', {'form': form, 'quiz': quiz})
-
-
-# Interactive Module Management
-@login_required
-def create_interactive_module(request, course_id):
-    course = get_object_or_404(Course, id=course_id)
-    if request.method == 'POST':
-        form = InteractiveModuleForm(request.POST)
-        if form.is_valid():
-            module = form.save(commit=False)
-            module.course = course
-            module.save()
-            return redirect('course_detail', course_id=course.id)
-    else:
-        form = InteractiveModuleForm()
-    return render(request, 'training/create_interactive_module.html', {'form': form, 'course': course})
-
-
-# Training Module Management
-def add_module(request):
-    if request.method == 'POST':
-        form = TrainingModuleForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('dashboard')
-    else:
-        form = TrainingModuleForm()
-    return render(request, 'training/module_form.html', {'form': form, 'title': 'Add Module'})
-
-
-def edit_module(request, module_id):
-    module = get_object_or_404(TrainingModule, id=module_id)
-    if request.method == 'POST':
-        form = TrainingModuleForm(request.POST, instance=module)
-        if form.is_valid():
-            form.save()
-            return redirect('dashboard')
-    else:
-        form = TrainingModuleForm(instance=module)
-    return render(request, 'training/module_form.html', {'form': form, 'title': 'Edit Module'})
-
-
-def delete_module(request, module_id):
-    module = get_object_or_404(TrainingModule, id=module_id)
-    module.delete()
-    return redirect('dashboard')
-
-
-from django.shortcuts import render
-
-def home(request):
-    return render(request, 'training/home.html')

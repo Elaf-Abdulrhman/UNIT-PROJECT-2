@@ -35,7 +35,7 @@ class AssignmentForm(forms.ModelForm):
 class TrainingModuleForm(forms.ModelForm):
     class Meta:
         model = TrainingModule
-        fields = ['title', 'description']
+        fields = ['title', 'description', 'content']
 
 
 # Course Form
@@ -53,7 +53,7 @@ class CourseForm(forms.ModelForm):
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
-        fields = ['text', 'option_1', 'option_2', 'option_3', 'option_4', 'correct_option']
+        fields = ['text', 'choice_1', 'choice_2', 'choice_3', 'choice_4', 'correct_option']
 
 
 # Interactive Module Form

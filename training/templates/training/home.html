@@ -1,41 +1,32 @@
 <!-- homepage.html -->
 {% extends 'training/base.html' %}
 
+{% block title %}Home{% endblock %}
+
 {% block content %}
-<div class="container mt-5">
+<div class="container my-5">
+    <h1>Welcome to PetroTrain</h1>
+    <p>Your training platform for success.</p>
 
-  <!-- Welcome Banner -->
-  <div class="text-center mb-4">
-    <h1 class="fw-bold">Welcome to the Oil & Gas Training Platform</h1>
-    <p class="lead text-muted">Your gateway to interactive, industry-focused learning.</p>
-  </div>
-
-  <!-- Modules Section -->
-  <div class="mb-4">
-    <h3 class="mb-3">Available Training Modules</h3>
-    {% if training_modules %}
-      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        {% for module in training_modules %}
-          <div class="col">
-            <div class="card h-100 shadow-sm">
-              <div class="card-body">
-                <h5 class="card-title">{{ module.title }}</h5>
-                <p class="card-text">Learn essential skills and techniques in oil & gas operations.</p>
-                <a href="{% url 'video_page' module.id %}" class="btn btn-primary">Start Module</a>
-              </div>
+    <h2>Latest Courses</h2>
+    <div class="row">
+        {% for course in courses %}
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ course.title }}</h5>
+                    <p class="card-text">{{ course.description|truncatewords:20 }}</p>
+                    <a href="#" class="btn btn-primary">View Course</a>
+                </div>
             </div>
-          </div>
+        </div>
+        {% empty %}
+        <p>No courses available.</p>
         {% endfor %}
-      </div>
-    {% else %}
-      <p class="text-muted">No training modules available at the moment.</p>
+    </div>
+
+    {% if user.is_authenticated and user.role == 'trainer' %}
+        <a href="{% url 'course_add' %}" class="btn btn-success">Add New Course</a>
     {% endif %}
-  </div>
-
-  <!-- Optional Call to Action -->
-  <div class="text-center mt-5">
-    <a href="#" class="btn btn-outline-success btn-lg">Explore Certifications</a>
-  </div>
-
 </div>
 {% endblock %}

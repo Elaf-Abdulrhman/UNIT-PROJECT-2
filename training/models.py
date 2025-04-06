@@ -25,7 +25,7 @@ class Course(models.Model):
     materials = models.FileField(upload_to='course_materials/', blank=True, null=True)
     trainer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='courses')
     enrolled_employees = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='enrolled_courses', blank=True)
-
+    
     def __str__(self):
         return self.title
 
@@ -45,11 +45,11 @@ class Quiz(models.Model):
 class Question(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='questions')
     text = models.TextField()  # The question text
-    option_1 = models.CharField(max_length=255)  # First option
-    option_2 = models.CharField(max_length=255)  # Second option
-    option_3 = models.CharField(max_length=255)  # Third option
-    option_4 = models.CharField(max_length=255)  # Fourth option
-    correct_option = models.IntegerField()  # Correct option (1, 2, 3, or 4)
+    choice_1 = models.CharField(max_length=255)  # First option
+    choice_2 = models.CharField(max_length=255)  # Second option
+    choice_3 = models.CharField(max_length=255)  # Third option
+    choice_4 = models.CharField(max_length=255)  # Fourth option
+    correct_option = models.IntegerField(default=1)  # Correct option (1, 2, 3, or 4)
 
     def __str__(self):
         return self.text
@@ -91,23 +91,42 @@ class InteractiveModule(models.Model):
 
 # Training Module Model
 class TrainingModule(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='training_modules')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='training_modules', blank=True, null=True)
+    custom_course_id = models.CharField(max_length=50, unique=True, help_text="Unique identifier for the course")
     title = models.CharField(max_length=200)
     description = models.TextField()
     content = models.TextField()  # HTML or rich text for module content
+    duration = models.PositiveIntegerField(default=30, help_text="Duration in minutes")
+    created_at = models.DateTimeField(auto_now_add=True)  # Automatically set when the module is created
+    updated_at = models.DateTimeField(auto_now=True)  # Automatically update when the module is modified
+    is_active = models.BooleanField(default=True)  # To mark if the module is active or archived
+    thumbnail = models.ImageField(upload_to='module_thumbnails/', blank=True, null=True)  # Optional thumbnail for the module
 
     def __str__(self):
         return self.title
+
+    def get_duration_in_hours(self):
+        """Convert duration from minutes to hours."""
+        return f"{self.duration // 60}h {self.duration % 60}m" if self.duration else "N/A"
 
 
 # Progress Model (To Track Employee Progress on Training Modules)
 class Progress(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='progress')
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='progress')
-    status = models.CharField(max_length=20, choices=[('in_progress', 'In Progress'), ('completed', 'Completed')], default='in_progress')
-    started_at = models.DateTimeField(auto_now_add=True)
-    completed_at = models.DateTimeField(blank=True, null=True)
+    course = models.ForeignKey(TrainingModule, on_delete=models.CASCADE, related_name='progress')
+    completed = models.BooleanField(default=False)
+    STATUS_CHOICES = (
+        ('in_progress', 'In Progress'),
+        ('completed', 'Completed'),
+    )
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='in_progress')
+    score = models.FloatField(blank=True, null=True)  # Optional score
+    started_at = models.DateTimeField(auto_now_add=True)  # Automatically set when progress starts
+    time_spent = models.PositiveIntegerField(blank=True, null=True, help_text="Time spent in minutes")  # Track engagement time
+    updated_at = models.DateTimeField(auto_now=True)  # Automatically update when progress is modified
+    completed_at = models.DateTimeField(blank=True, null=True)  # Track when the module is completed
+    feedback = models.TextField(blank=True, null=True)  # Trainer comments or feedback
 
     def __str__(self):
-        return f'{self.user.username} - {self.course.title} - {self.status}'
+        return f'{self.user.username} - {self.module.course.title} - {self.status}'
 
