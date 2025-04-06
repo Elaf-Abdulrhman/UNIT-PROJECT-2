@@ -1,0 +1,12 @@
+{% extends 'training/base.html' %}
+
+{% block title %}Create Interactive Module{% endblock %}
+
+{% block content %}
+<h1>Create Interactive Module for {{ course.title }}</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Create Module</button>
+</form>
+{% endblock %}

@@ -5,7 +5,7 @@ from . import views
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('', views.home, name='home'),  # Ensure this is defined for the home page
+    path('', views.home, name='home'),  # Home page
     path('register/', views.register, name='register'),
     path('login/', views.CustomLoginView.as_view(), name='login'),
     path('logout/', views.custom_logout, name='logout'),  
@@ -17,10 +17,16 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     path('about/', views.about, name='about'),
-    path('courses/', views.course_list, name='course_list'),
     path('courses/progress/<int:course_id>/', views.progress_tracking, name='progress_tracking'),
     path('courses/add/', views.course_add, name='course_add'),
     path('courses/edit/<int:pk>/', views.course_edit, name='course_edit'),
     path('courses/delete/<int:pk>/', views.course_delete, name='course_delete'),
-    path('courses/<int:pk>/', views.courses, name='courses'),
+    path('courses/<int:course_id>/employees/', views.enrolled_employees, name='enrolled_employees'),
+    path('courses/<int:course_id>/progress/', views.track_progress, name='track_progress'),
+    path('courses/enroll/<int:course_id>/', views.enroll_course, name='enroll_course'),
+    path('courses/<int:course_id>/quizzes/create/', views.create_quiz, name='create_quiz'),
+    path('quizzes/<int:quiz_id>/questions/add/', views.add_question, name='add_question'),
+    path('courses/<int:course_id>/assignments/create/', views.create_assignment, name='create_assignment'),
+    path('courses/<int:course_id>/interactive_modules/create/', views.create_interactive_module, name='create_interactive_module'),
+    path('courses/', views.course_list, name='course_list'),
 ]

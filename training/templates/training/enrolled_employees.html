@@ -1,22 +1,22 @@
 {% extends 'training/base.html' %}
 
-{% block title %}Progress Tracking{% endblock %}
+{% block title %}Enrolled Employees{% endblock %}
 
 {% block content %}
 <div class="container my-5">
-    <h1>Progress Tracking for {{ course.title }}</h1>
+    <h1>Enrolled Employees for {{ course.title }}</h1>
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Employee</th>
-                <th>Progress</th>
+                <th>Employee Name</th>
+                <th>Email</th>
             </tr>
         </thead>
         <tbody>
-            {% for employee in enrolled_employees %}
+            {% for employee in employees %}
             <tr>
                 <td>{{ employee.username }}</td>
-                <td>50% (Example Progress)</td> <!-- Replace with actual progress logic -->
+                <td>{{ employee.email }}</td>
             </tr>
             {% empty %}
             <tr>

@@ -1,28 +1,59 @@
 {% extends 'training/base.html' %}
 {% load static %}
-{% block title %}My Courses{% endblock %}
+{% block title %}Courses{% endblock %}
 {% block content %}
-<div class="container">
-    <h1>My Courses</h1>
-    <a href="{% url 'course_add' %}" class="btn btn-primary mb-3">Add New Course</a>
-    <div class="card">
-        {% for course in courses %}
-        <div class="card mb-3">
-            <div class="card-body">
-                <h3>{{ course.title }}</h3>
-                <p>{{ course.description }}</p>
-                <p><strong>Start Date:</strong> {{ course.start_date }}</p>
-                <p><strong>End Date:</strong> {{ course.end_date }}</p>
-                {% if course.materials %}
-                <p><a href="{{ course.materials.url }}" target="_blank">Download Materials</a></p>
-                {% endif %}
-                <a href="{% url 'course_edit' course.pk %}" class="btn btn-warning">Edit</a>
-                <a href="{% url 'course_delete' course.pk %}" class="btn btn-danger">Delete</a>
-            </div>
-        </div>
-        {% empty %}
-        <p>No courses available.</p>
-        {% endfor %}
-    </div>
+<div class="container my-5">
+    <h1 class="mb-4">Courses</h1>
+    {% if user.is_authenticated and user.role == 'trainer' or user.role == 'admin' %}
+        <a href="{% url 'course_add' %}" class="btn btn-primary mb-3">Add New Course</a>
+    {% endif %}
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for course in courses %}
+            <tr>
+                <td>{{ course.title }}</td>
+                <td>{{ course.description }}</td>
+                <td>{{ course.start_date }}</td>
+                <td>{{ course.end_date }}</td>
+                <td>
+                    {% if user.is_authenticated %}
+                        {% if user.role == 'trainer' %}
+                            <!-- Trainer-specific actions -->
+                            <a href="{% url 'course_edit' course.id %}" class="btn btn-warning btn-sm">Edit</a>
+                            <form method="post" action="{% url 'course_delete' course.id %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                            <a href="{% url 'enrolled_employees' course.id %}" class="btn btn-info btn-sm">Enrolled Employees</a>
+                            <a href="{% url 'track_progress' course.id %}" class="btn btn-success btn-sm">Track Progress</a>
+                        {% elif user.role == 'employee' %}
+                            <!-- Employee-specific actions -->
+                            <form method="post" action="{% url 'enroll_course' course.id %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary btn-sm">Enroll</button>
+                            </form>
+                        {% endif %}
+                    {% else %}
+                        <!-- For unauthenticated users -->
+                        <p>enroll</p>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">No courses available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}

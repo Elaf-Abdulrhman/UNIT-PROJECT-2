@@ -1,50 +1,41 @@
 <!-- homepage.html -->
-
 {% extends 'training/base.html' %}
 
 {% block content %}
-  <h2>Welcome to the Training Platform</h2>
-  <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+<div class="container mt-5">
 
-  <p>Here are the available training modules:</p>
-  <ul>
-    {% for module in training_modules %}
-      <li><a href="{% url 'video_page' module.id %}">{{ module.title }}</a></li>
-    {% endfor %}
-  </ul>
-
-  <!-- A-Frame Scene -->
-  <h3>Explore Our Industrial VR Training Environment</h3>
-  <div style="position: relative; height: 500px; width: 100%; margin-top: 20px;">
-    <a-scene embedded style="height: 100%; width: 100%;">
-      <!-- Sky -->
-      <a-sky color="#ECECEC"></a-sky>
-
-      <!-- Ground -->
-      <a-plane position="0 0 -4" rotation="-90 0 0" width="20" height="20" color="#7BC8A4"></a-plane>
-
-      <!-- Conveyor Belt -->
-      <a-box position="0 0.5 -5" depth="6" height="0.2" width="2" color="#4A4A4A"></a-box>
-      <a-cylinder position="0 0.3 -7" radius="0.3" height="2" rotation="90 0 0" color="#333"></a-cylinder>
-      <a-cylinder position="0 0.3 -3" radius="0.3" height="2" rotation="90 0 0" color="#333"></a-cylinder>
-
-      <!-- Robotic Arm -->
-      <a-box position="2 0.5 -5" depth="0.5" height="1" width="0.5" color="#FF5733"></a-box>
-      <a-cylinder position="2 1.2 -5" radius="0.2" height="1" color="#FFC300"></a-cylinder>
-      <a-box position="2 1.8 -5" depth="0.2" height="0.2" width="1" color="#FF5733"></a-box>
-
-      <!-- Control Panel -->
-      <a-box position="-2 0.5 -5" depth="0.5" height="1" width="1" color="#3498DB"></a-box>
-      <a-plane position="-2 1 -5.25" rotation="0 0 0" width="0.8" height="0.5" color="#2ECC71"></a-plane>
-
-      <!-- Pipes -->
-      <a-cylinder position="0 1 -8" radius="0.2" height="4" rotation="0 0 90" color="#8E44AD"></a-cylinder>
-      <a-cylinder position="0 1 -2" radius="0.2" height="4" rotation="0 0 90" color="#8E44AD"></a-cylinder>
-
-      <!-- Camera -->
-      <a-camera position="0 1.6 0">
-        <a-cursor></a-cursor>
-      </a-camera>
-    </a-scene>
+  <!-- Welcome Banner -->
+  <div class="text-center mb-4">
+    <h1 class="fw-bold">Welcome to the Oil & Gas Training Platform</h1>
+    <p class="lead text-muted">Your gateway to interactive, industry-focused learning.</p>
   </div>
+
+  <!-- Modules Section -->
+  <div class="mb-4">
+    <h3 class="mb-3">Available Training Modules</h3>
+    {% if training_modules %}
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for module in training_modules %}
+          <div class="col">
+            <div class="card h-100 shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title">{{ module.title }}</h5>
+                <p class="card-text">Learn essential skills and techniques in oil & gas operations.</p>
+                <a href="{% url 'video_page' module.id %}" class="btn btn-primary">Start Module</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-muted">No training modules available at the moment.</p>
+    {% endif %}
+  </div>
+
+  <!-- Optional Call to Action -->
+  <div class="text-center mt-5">
+    <a href="#" class="btn btn-outline-success btn-lg">Explore Certifications</a>
+  </div>
+
+</div>
 {% endblock %}

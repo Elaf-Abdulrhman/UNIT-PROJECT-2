@@ -1,0 +1,31 @@
+{% extends 'training/base.html' %}
+
+{% block title %}Track Progress{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h1>Progress Tracking for {{ course.title }}</h1>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Employee Name</th>
+                <th>Progress</th>
+                <th>Performance</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in progress_data %}
+            <tr>
+                <td>{{ data.employee.username }}</td>
+                <td>{{ data.progress }}</td>
+                <td>{{ data.performance }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" class="text-center">No progress data available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

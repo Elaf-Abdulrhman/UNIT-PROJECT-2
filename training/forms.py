@@ -2,9 +2,10 @@
 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser  # Import the custom user model if using one
-from .models import Course
+from .models import CustomUser, Course, Quiz, Assignment, TrainingModule, Question, InteractiveModule
 
+
+# User Registration Form
 class UserRegistrationForm(UserCreationForm):
     email = forms.EmailField()
 
@@ -12,11 +13,32 @@ class UserRegistrationForm(UserCreationForm):
         model = CustomUser  # Use the custom user model
         fields = ['username', 'email', 'password1', 'password2', 'role']  # Include role if using CustomUser
 
-class QuizForm(forms.Form):
-    # Example fields
-    question = forms.CharField(max_length=255)
-    answer = forms.CharField(max_length=255)
 
+# Quiz Form
+class QuizForm(forms.ModelForm):
+    class Meta:
+        model = Quiz
+        fields = ['title', 'description']
+
+
+# Assignment Form
+class AssignmentForm(forms.ModelForm):
+    class Meta:
+        model = Assignment
+        fields = ['title', 'description', 'due_date', 'file_upload']  # Include file_upload
+        widgets = {
+            'due_date': forms.DateInput(attrs={'type': 'date'}),
+        }
+
+
+# Training Module Form
+class TrainingModuleForm(forms.ModelForm):
+    class Meta:
+        model = TrainingModule
+        fields = ['title', 'description']
+
+
+# Course Form
 class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
@@ -25,4 +47,18 @@ class CourseForm(forms.ModelForm):
             'start_date': forms.DateInput(attrs={'type': 'date'}),
             'end_date': forms.DateInput(attrs={'type': 'date'}),
         }
+
+
+# Question Form
+class QuestionForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = ['text', 'option_1', 'option_2', 'option_3', 'option_4', 'correct_option']
+
+
+# Interactive Module Form
+class InteractiveModuleForm(forms.ModelForm):
+    class Meta:
+        model = InteractiveModule
+        fields = ['title', 'description', 'content']
 
