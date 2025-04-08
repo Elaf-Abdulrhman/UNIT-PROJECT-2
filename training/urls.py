@@ -21,8 +21,8 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     path('about/', views.about, name='about'),
-    path('courses/add/', views.course_add, name='course_add'),
-    path('courses/edit/<int:pk>/', views.course_edit, name='course_edit'),
+    path('courses/add/', views.course_add, name='course_add'),  # Add course
+    path('courses/edit/<int:pk>/', views.course_edit, name='course_edit'),  # Edit course
     path('courses/delete/<int:pk>/', views.course_delete, name='course_delete'),
     path('courses/<int:course_id>/employees/', views.enrolled_employees, name='enrolled_employees'),
     path('courses/<int:course_id>/progress/', views.track_progress, name='track_progress'),
@@ -32,7 +32,8 @@ urlpatterns = [
     path('courses/<int:course_id>/assignments/create/', views.create_assignment, name='create_assignment'),
     path('courses/', views.course_list, name='course_list'),
     path('courses/<int:course_id>/', views.course_detail, name='course_detail'),
-    path('start-course/<int:course_id>/', views.start_course, name='start_course')
+    path('start-course/<int:course_id>/', views.start_course, name='start_course'),
+    path('courses/<int:course_id>/quiz/<str:quiz_type>/', views.solve_quiz, name='solve_quiz'),
 ]
 
 urlpatterns += [

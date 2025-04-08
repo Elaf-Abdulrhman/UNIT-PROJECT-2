@@ -16,9 +16,18 @@ class UserRegistrationForm(UserCreationForm):
 
 # Custom User Creation Form
 class CustomUserCreationForm(UserCreationForm):
+    role = forms.ChoiceField(choices=CustomUser.ROLE_CHOICES, required=True, label="Role")
+
     class Meta:
         model = CustomUser
-        fields = ('username', 'email')  # Add any fields you want to include
+        fields = ('username', 'email', 'password1', 'password2', 'role')  # Removed 'courses'
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.role = self.cleaned_data.get('role')
+        if commit:
+            user.save()
+        return user
 
 
 # Custom User Change Form
@@ -54,13 +63,20 @@ class TrainingModuleForm(forms.ModelForm):
 
 # Course Form
 class CourseForm(forms.ModelForm):
+    pre_quiz = forms.ModelChoiceField(
+        queryset=Quiz.objects.all(),
+        required=False,
+        label="Pre-Quiz"
+    )
+    post_quiz = forms.ModelChoiceField(
+        queryset=Quiz.objects.all(),
+        required=False,
+        label="Post-Quiz"
+    )
+
     class Meta:
         model = Course
-        fields = ['title', 'description', 'image', 'start_date', 'end_date', 'trainer']
-        widgets = {
-            'start_date': forms.DateInput(attrs={'type': 'date'}),
-            'end_date': forms.DateInput(attrs={'type': 'date'}),
-        }
+        fields = ['title', 'description', 'image', 'start_date', 'end_date', 'pre_quiz', 'post_quiz']
 
 
 # Question Form

@@ -48,11 +48,12 @@
                         <span class="material-icons">person</span> Profile
                     </button>
                 </a>
-                <a href="{% url 'logout' %}" class="logout-btn">
-                    <button class="logout">
+                <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="logout">
                         <span class="material-icons">logout</span> Logout
                     </button>
-                </a>
+                </form>
             {% else %}
                 <!-- Show Sign Up and Sign In buttons for guests -->
                 <a href="{% url 'signup' %}" class="signup-btn">

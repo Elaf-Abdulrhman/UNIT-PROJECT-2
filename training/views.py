@@ -22,10 +22,6 @@ from .models import (
     Question,
 )
 
-# views.py
-from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import render, redirect
-
 def signup_view(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -94,39 +90,41 @@ def course_list(request):
 
 
 @login_required
+def course_edit(request, pk):
+    course = get_object_or_404(Course, pk=pk)
+    if request.method == 'POST':
+        form = CourseForm(request.POST, request.FILES, instance=course)
+        if form.is_valid():
+            form.save()
+            return redirect('course_list')  # Redirect to the course list after saving
+    else:
+        form = CourseForm(instance=course)
+
+    return render(request, 'training/courses/course_edit.html', {'form': form, 'course': course})
+
+
+@login_required
 def course_add(request):
     if request.method == 'POST':
         form = CourseForm(request.POST, request.FILES)
         if form.is_valid():
             course = form.save(commit=False)
-            course.trainer = request.user
+            course.trainer = request.user  # Automatically set the logged-in user as the trainer
             course.save()
-            return redirect('course_list')
+            return redirect('course_list')  # Redirect to the course list after saving
     else:
         form = CourseForm()
+
     return render(request, 'training/courses/course_add.html', {'form': form})
 
 
 @login_required
-def course_edit(request, pk):
-    course = get_object_or_404(Course, pk=pk, trainer=request.user)
-    if request.method == 'POST':
-        form = CourseForm(request.POST, request.FILES, instance=course)
-        if form.is_valid():
-            form.save()
-            return redirect('course_list')
-    else:
-        form = CourseForm(instance=course)
-    return render(request, 'courses/course_form.html', {'form': form})
-
-
-@login_required
 def course_delete(request, pk):
-    course = get_object_or_404(Course, pk=pk, trainer=request.user)
+    course = get_object_or_404(Course, pk=pk)  # Fetch the course or return a 404 error
     if request.method == 'POST':
         course.delete()
-        return redirect('course_list')
-    return render(request, 'courses/course_confirm_delete.html', {'course': course})
+        return redirect('course_list')  # Redirect to the course list after deletion
+    return render(request, 'training/courses/course_delete.html', {'course': course})
 
 
 @login_required
@@ -234,6 +232,33 @@ class CustomLoginView(LoginView):
 @login_required
 def start_course(request, course_id):
     course = get_object_or_404(Course, id=course_id)
+    course = Course.objects.create(
+        title="Sample Course",
+        description="This is a sample course",
+        trainer=request.user,
+        image=None,
+        # Remove 'start_date' and 'end_date' if they are being passed here
+    )
     return render(request, 'training/courses/start_course.html', {'course': course})
+
+
+@login_required
+def solve_quiz(request, course_id, quiz_type):
+    course = get_object_or_404(Course, pk=course_id)
+    if quiz_type == 'pre':
+        quiz = course.pre_quiz
+    elif quiz_type == 'post':
+        quiz = course.post_quiz
+    else:
+        return redirect('course_list')  # Redirect if quiz_type is invalid
+
+    if not quiz:
+        return render(request, 'training/quizzes/no_quiz.html', {'quiz_type': quiz_type})
+
+    if request.method == 'POST':
+        # Logic to handle quiz submission (e.g., calculate score, save progress)
+        return redirect('course_list')  # Redirect after solving the quiz
+
+    return render(request, 'training/quizzes/solve_quiz.html', {'quiz': quiz, 'quiz_type': quiz_type})
 
 

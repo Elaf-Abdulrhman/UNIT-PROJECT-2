@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+from django.contrib.auth import get_user_model
 
 
 # Custom User model for Employee, Trainer, Admin roles
@@ -10,39 +11,10 @@ class CustomUser(AbstractUser):
         ('trainer', 'Trainer'),
     ]
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='employee')
-    enrolled_courses = models.ManyToManyField(
-        'Course',
-        blank=True,
-        related_name='enrolled_by_users'  # Unique related_name for reverse query
-    )
+    enrolled_courses = models.ManyToManyField('Course', blank=True, related_name='enrolled_users')
 
     def __str__(self):
         return self.username
-
-
-# Course Model
-class Course(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField()
-    trainer = models.ForeignKey(
-        CustomUser,
-        on_delete=models.CASCADE,
-        related_name='created_courses'  # Unique related_name for trainers
-    )
-    enrolled_employees = models.ManyToManyField(
-        CustomUser,
-        blank=True,
-        related_name='enrolled_in_courses'  # Unique related_name for reverse query
-    )
-    image = models.ImageField(upload_to='course_images/', blank=True, null=True)
-    start_date = models.DateField()
-    end_date = models.DateField()
-    pre_test = models.ForeignKey('Quiz', on_delete=models.SET_NULL, related_name='pre_test_courses', blank=True, null=True)
-    post_test = models.ForeignKey('Quiz', on_delete=models.SET_NULL, related_name='post_test_courses', blank=True, null=True)
-    materials = models.TextField()
-
-    def __str__(self):
-        return self.title
 
 
 # Quiz Model
@@ -50,6 +22,37 @@ class Quiz(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+
+# Course Model
+class Course(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    trainer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='created_courses'
+    )
+    image = models.ImageField(upload_to='course_images/', blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+    pre_quiz = models.ForeignKey(
+        Quiz,
+        on_delete=models.SET_NULL,
+        related_name='pre_quiz_courses',
+        blank=True,
+        null=True
+    )
+    post_quiz = models.ForeignKey(
+        Quiz,
+        on_delete=models.SET_NULL,
+        related_name='post_quiz_courses',
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return self.title
