@@ -1,32 +1,39 @@
-<!-- homepage.html -->
-{% extends 'training/base.html' %}
-
-{% block title %}Home{% endblock %}
+{% extends "training/base.html" %}
+{% load static %}
 
 {% block content %}
-<div class="container my-5">
-    <h1>Welcome to PetroTrain</h1>
-    <p>Your training platform for success.</p>
+<style>
 
-    <h2>Latest Courses</h2>
-    <div class="row">
-        {% for course in courses %}
-        <div class="col-md-4">
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">{{ course.title }}</h5>
-                    <p class="card-text">{{ course.description|truncatewords:20 }}</p>
-                    <a href="#" class="btn btn-primary">View Course</a>
-                </div>
-            </div>
-        </div>
-        {% empty %}
-        <p>No courses available.</p>
-        {% endfor %}
+    @keyframes moveText {
+        0% {
+            transform: translateX(8%) scale(1);
+            /* Start offscreen to the left and smaller */
+            opacity: 20;
+            /* Start with no opacity */
+        }
+
+        50% {
+            transform: translateX(0) scale(1);
+            /* Move to the center and normal size */
+            opacity: 1;
+            /* Full opacity */
+        }
+
+        100% {
+            transform: translateX(40%) scale(1.5);
+            /* Move to the start of the navbar and bigger */
+            opacity: 0;
+            /* End with no opacity */
+        }
+    }
+</style>
+
+<section class="home">
+    <div class="container mt-5">
+        <h1 class="moving-text">Fuel Your Future with Knowledge</h1>
+        <p>PetroTrain ensures that your employees will be trained and taught best practices withion oil & gas ...<br></p>
+        <btn class="explore">View Courses</btn>
+        <!-- p will be edited , this page should just have that -->
     </div>
-
-    {% if user.is_authenticated and user.role == 'trainer' %}
-        <a href="{% url 'course_add' %}" class="btn btn-success">Add New Course</a>
-    {% endif %}
-</div>
+</section>
 {% endblock %}

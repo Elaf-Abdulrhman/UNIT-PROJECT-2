@@ -42,7 +42,7 @@ class TrainingModuleForm(forms.ModelForm):
 class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
-        fields = ['title', 'description', 'start_date', 'end_date', 'materials']
+        fields = ['title', 'description', 'image', 'start_date', 'end_date', 'trainer']
         widgets = {
             'start_date': forms.DateInput(attrs={'type': 'date'}),
             'end_date': forms.DateInput(attrs={'type': 'date'}),

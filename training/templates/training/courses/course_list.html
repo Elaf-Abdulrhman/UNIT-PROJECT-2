@@ -1,0 +1,29 @@
+{% extends 'training/base.html' %}
+{% load static %}
+
+{% block title %}Courses{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Our Courses</h2>
+    <div class="course-grid">
+        {% for course in courses %}
+        <div class="card h-100 shadow-sm">
+            {% if course.image %}
+            <img src="{{ course.image.url }}" class="card-img-top course-image" alt="{{ course.title }}">
+            {% else %}
+            <img src="{% static 'images/default.png' %}" class="card-img-top course-image" alt="Default Image">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ course.title }}</h5>
+                <p class="card-text">{{ course.description|truncatewords:20 }}</p>
+            </div>
+            <div class="card-footer text-center">
+                <a href="{% url 'course_detail' course.id %}" class="btn btn-primary">View Details</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,35 @@
+{% extends 'training/base.html' %}
+
+{% block title %}{{ course.title }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="mb-4">{{ course.title }}</h1>
+    <div class="row">
+        <div class="col-md-6">
+            {% if course.image %}
+                <img src="{{ course.image.url }}" alt="{{ course.title }}" class="img-fluid rounded">
+            {% else %}
+                <p>No image available for this course.</p>
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+            <p>{{ course.description }}</p>
+            <hr>
+            <h3>Pre-Test</h3>
+            {% if course.pre_test %}
+                <a href="{% url 'quiz_detail' course.pre_test.id %}" class="btn btn-primary">Take Pre-Test</a>
+            {% else %}
+                <p>No pre-test available for this course.</p>
+            {% endif %}
+            <hr>
+            <h3>Post-Test</h3>
+            {% if course.post_test %}
+                <a href="{% url 'quiz_detail' course.post_test.id %}" class="btn btn-success">Take Post-Test</a>
+            {% else %}
+                <p>No post-test available for this course.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

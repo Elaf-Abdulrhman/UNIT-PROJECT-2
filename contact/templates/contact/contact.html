@@ -1,24 +1,133 @@
-{% extends 'training/base.html' %}
-{% block title %}Contact Us{% endblock %}
+{% extends "training/base.html" %}
+{% load static %}
+<title>{% block title %}Contact Page{% endblock %}
+
 {% block content %}
-<div class="container my-5">
-    <h1 class="mb-4">Contact Us</h1>
-    <p>If you have any questions or inquiries, feel free to reach out to us using the form below:</p>
-    <form method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <label for="message">Message:</label>
-            <textarea id="message" name="message" class="form-control" rows="5" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary mt-3">Send</button>
-    </form>
+<!-- Leaflet.js CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+<style>
+    /* Page background */
+    body {
+        background-color: #111; /* Dark background to make white text stand out */
+    }
+
+    /* Contact container with flexbox layout */
+    .contact-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin: 40px 20px;
+        flex-wrap: wrap;
+    }
+
+    /* Contact Info */
+    .contact-info {
+        flex: 1;
+        max-width: 500px;
+        margin-right: 30px;
+    }
+
+    .contact-info h3 {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        margin-left: 75px;
+        color: #000000; /* Gold color for headings */
+        text-transform: uppercase;
+    }
+
+    .contact-info ul {
+        list-style-type: none;
+        padding: 0;
+        margin-left: 80px;
+    }
+
+    .contact-info li {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .contact-info .phone,
+    .contact-info .email{
+        color: #668fe1; /* Light text for contact details */
+    }
+
+    /* Map Container */
+    .map-container {
+        flex: 1;
+        max-width: 600px;
+        height: 500px;
+        border-radius: 10px; /* Rounded corners */
+        overflow: hidden; /* Ensure map container has rounded borders */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow effect */
+    }
+
+    /* Map Styling */
+    #map {
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Make the page responsive */
+    @media (max-width: 768px) {
+        .contact-container {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .contact-info {
+            margin-right: 0;
+            margin-bottom: 20px;
+        }
+
+        .map-container {
+            max-width: 100%;
+            height: 400px; /* Adjust map height on smaller screens */
+            margin-left: 0; /* Ensure map is centered or aligned with contact info */
+        }
+    }
+</style>
+
+<body>
+<!-- Contact container -->
+<div class="contact-container">
+    <!-- Contact info -->
+    <div class="contact-info">
+        <h3 class="c-title">Contact Us</h3>
+        <ul>
+            <li>Telephone: <span class="phone"> <a href="#">+966 57263883764</span></a></li>
+            <li>Email: <span class="email"><a href="#">info@realestate.com</span></a></li>
+            <li>Address: <span class="address" style="text-transform: uppercase">
+                Anas bin Malik, Riyadh,<br>
+                Building W-112<br>
+                Saudi Arabia<br>
+            </span></li>
+        </ul>
+    </div>
+
+    <!-- Map container -->
+    <div class="map-container">
+        <div id="map"></div>
+    </div>
 </div>
+
+<!-- Leaflet.js JavaScript -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+    // Create the map instance
+    var map = L.map('map').setView([24.774265, 46.738586], 15); // Coordinates (Riyadh)
+
+    // Add OpenStreetMap tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Add a marker at the center
+    L.marker([24.774265, 46.738586]).addTo(map)
+        .bindPopup('Anas bin Malik, Riyadh, Saudi Arabia')
+        .openPopup();
+</script>
+</body>
 {% endblock %}

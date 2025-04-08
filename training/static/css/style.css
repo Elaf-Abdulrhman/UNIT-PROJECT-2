@@ -1,105 +1,327 @@
-:root {
-    --primary-color: #2c3e50;   /* Deep steel blue */
-    --accent-color: #e67e22;    /* Oil orange */
-    --background-color: #f4f4f4;
-    --card-bg: #ffffff;
-    --text-color: #2d2d2d;
-}
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    line-height: 1.8;
-}
-
-/* Navbar */
-.navbar{
-    background-color: var(--primary-color);
-    color: #fff;
-    padding: 1rem 2rem;
-}
-
-.navbar a {
-    font-size: 1rem;
-    color: #fff;
-    padding: 0.5rem;
-    transition: color 0.3s;
-}
-
-.navbar a:hover {
-    color: var(--accent-color);
-}
-
-/* Card Enhancements */
-.card {
-    border-left: 5px solid var(--accent-color);
-    padding: 1.5rem;
-    transition: all 0.3s ease-in-out;
-}
-
-/* Footer */
-.footer {
-    background-color: var(--primary-color);
-    color: #fff;
-}
-
-/* Buttons */
-button, .btn {
-    background-color: var(--accent-color);
-    border-radius: 8px;
-    padding: 0.75rem 1.25rem;
+*{
+    font-family: 'phudu', sans-serif;
+    margin-top: 10px;
     font-weight: bold;
 }
 
-/* Tables */
-table th {
-    background-color: var(--accent-color);
+
+body.dark-mode h1{
+    color:#ffffff;
+}
+body.dark-mode p{
+    color:#ffffff;
+    font-weight: light;
+}
+body.dark-mode nav {
+    font-weight: normal;
+    background-color: rgb(28, 27, 27);  /* Background for nav bar */
+    padding: 10px 50px;          /* Padding around the nav bar */
+    border-radius: 30px;      /* Circular edges for the navbar */
+    margin: 0;                /* Remove horizontal margin */
+    display: flex;            /* Use flexbox to align items in a row */
+    justify-content: center;  /* Center the items horizontally */
+    align-items: center;      /* Align items vertically in the middle */
+    box-shadow: none;         /* Remove the box-shadow */
+    transition: transform 0.3s ease; /* Smooth transition for scaling */
 }
 
-/* Add hover effect to cards */
+body.dark-mode .nav-link {
+    text-decoration: none;  /* Remove underline from links */
+    color: rgb(255, 255, 255);           /* Text color */
+    font-weight: lighter;   /* Lighter font weight for nav items */
+    padding: 10px 10px;     /* Reduce padding around the links */
+    transition: color 0.3s ease, transform 0.3s ease; /* Smooth transitions for color and transform */
+}
+
+body.dark-mode .signup {
+    display: flex;
+    align-items: center;
+    background-color: transparent; /* Transparent background */
+    color: rgb(255, 255, 255);
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+    margin-left: 10px; /* Add some space between buttons */
+}
+
+body.dark-mode /* Style for the mode-toggle button */
+.mode-toggle {
+    display: flex;
+    align-items: center;
+    background-color: transparent; /* Transparent background */
+    color: rgb(255, 255, 255);
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+    margin-left: 10px; /* Add some space between buttons */
+}
+body.dark-mode h3{
+    color:#ffffff;
+}
+/* Container for logo, nav, and sign-up button */
+.header-container {
+    display: flex;
+    justify-content: space-between; /* Space between the logo, nav, and buttons */
+    align-items: center;            /* Vertically align the elements */
+    padding: 10px 20px;             /* Add some padding to the header */
+}
+
+/* Navigation bar styling */
+nav {
+    font-weight: normal;
+    background-color: white;  /* Background for nav bar */
+    padding: 10px 50px;          /* Padding around the nav bar */
+    border-radius: 30px;      /* Circular edges for the navbar */
+    margin: 0;                /* Remove horizontal margin */
+    display: flex;            /* Use flexbox to align items in a row */
+    justify-content: center;  /* Center the items horizontally */
+    align-items: center;      /* Align items vertically in the middle */
+    box-shadow: none;         /* Remove the box-shadow */
+    transition: transform 0.3s ease; /* Smooth transition for scaling */
+}
+
+/* Hover effect for nav bar */
+nav:hover {
+    transform: scale(1.05); /* Scale up the entire navbar slightly */
+}
+
+/* Style for the unordered list */
+.navbar-nav {
+    display: flex;           /* Align items in a row */
+    list-style-type: none;   /* Remove bullet points from the list */
+    margin: 0;
+    padding: 0;
+    width: fit-content;
+}
+
+/* Style for the individual list items (nav items) */
+.nav-item {
+    margin: 0 10px;  /* Reduce space between items */
+    transition: color 0.3s ease, transform 0.3s ease; /* Smooth transitions for color and transform */
+}
+
+.nav-item:hover {
+    transform: scale(1.1); /* Slightly increase the size of the nav items on hover */
+}
+
+/* Style for the links */
+.nav-link {
+    text-decoration: none;  /* Remove underline from links */
+    color: black;           /* Text color */
+    font-weight: lighter;   /* Lighter font weight for nav items */
+    padding: 10px 10px;     /* Reduce padding around the links */
+    transition: color 0.3s ease, transform 0.3s ease; /* Smooth transitions for color and transform */
+}
+
+
+/* Hover effect for nav links */
+.nav-link:hover {
+    color: red;  /* Change text color to red on hover */
+    transform: scale(1.1); /* Slightly increase the size of the nav items on hover */
+}
+
+.logo {
+    width: 50px;  /* Set the width of the logo */
+    height: 50px; /* Set the height of the logo */
+    margin-left: 80px; /* Add some space to the right of the logo */
+    margin-top: 100px;   /* Adjust the space at the top */
+    transition: color 0.3s ease;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.logo:hover {
+    color: red;
+    transform: scale(1.1);
+}
+
+.moving-text {
+    text-transform: uppercase;
+    font-size: 2rem; /* Increase the font size */
+    margin-left: 30px;
+}
+
+/* Style for the h1 element */
+.home h1 {
+    text-transform: capitalize; /* Capitalize the text */
+    margin-top: 20px;           /* Adjust the top margin */
+    text-align: center;         /* Center the text */
+    font-size: 2.5rem;          /* Set the font size */
+    color: #333;                /* Set the text color */
+    text-align: left;
+}
+
+/* Style for the paragraph element */
+.home p {
+    text-align: left; /* Align the text to the left */
+    color: #000000;   /* Set the text color */
+    font-size: 1.2rem; /* Set the font size */
+    margin-top: 10px; /* Adjust the top margin */
+    margin-left: 7%;
+}
+
+/* Style for the button element */
+.home .explore {
+    background-color: #000000; /* Set the background color */
+    color: white;           /* Set the text color */
+    border: none;           /* Remove the border */
+    padding: 10px 20px;     /* Padding around the button */
+    margin-top: 20px;       /* Adjust the top margin */
+    cursor: pointer;        /* Change cursor to pointer on hover */
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+    border-radius: 20px;
+    width: fit-content;
+    margin-left: 7%;
+    margin-top: 20%;
+}
+
+.home h1{
+    font-size: 5.5rem;
+}
+
+/* Style for the buttons container */
+.buttons {
+    display: flex;
+    align-items: center;
+    margin-right: 60px;
+}
+
+/* Style for the sign-up button */
+.signup, .signin {
+    display: flex;
+    align-items: center;
+    background-color: transparent; /* Transparent background */
+    color: black;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+    margin-left: 10px; /* Add some space between buttons */
+}
+
+/* Material icon in sign-up button */
+.signup .material-icons {
+    margin-right: 8px; /* Space between icon and text */
+}
+
+/* Hover effect for the sign-up button */
+.signup:hover , .signin:hover{
+    color: red; /* Change text color on hover */
+    transform: scale(1.1);
+}
+
+/* Style for the mode-toggle button */
+.mode-toggle {
+    display: flex;
+    align-items: center;
+    background-color: transparent; /* Transparent background */
+    color: black;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+    margin-left: 10px; /* Add some space between buttons */
+}
+
+/* Material icon in mode-toggle button */
+.mode-toggle .material-icons {
+    margin-right: 8px; /* Space between icon and text */
+}
+
+/* Hover effect for the mode-toggle button */
+.mode-toggle:hover {
+    color: red; /* Change text color on hover */
+    transform: scale(1.1);
+}
+
+body .contact{
+    background-color: #333;
+}
+.c-title{
+    margin-left: 95px; /* Add some space to the right of the logo */
+}
+
+/* Style for the properties list */
+.properties-container {
+    margin-left:75px;
+    text-align: left;
+    padding: 20px;
+}
+
+.properties-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Two columns layout */
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.property-item {
+    background-color: #EBEAE9;
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.property-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.property-item h3 {
+    margin-top: 10px;
+    color: #333;
+    text-transform: uppercase;
+}
+
+.more-btn{
+    background-color: #000000; /* Set the background color */
+    color: white;           /* Set the text color */
+    border: none;           /* Remove the border */
+    padding: 5px 20px;     /* Padding around the button */
+    cursor: pointer;        /* Change cursor to pointer on hover */
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+    border-radius: 20px;
+    width: fit-content;
+    margin-left: 80%;
+    margin-top: 20%;
+}
+
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    gap: 20px; /* Space between cards */
+}
+
+.card {
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
 .card:hover {
-    transform: translateY(-7px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: auto;
-    padding: 1rem;
+#course-img {
+    height: 20px;
+    width: 20px;
+    object-fit: cover;
+    border-radius: 5px;
 }
 
-/* Responsive Navbar */
+/* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
-    .navbar {
-        flex-direction: column;
-        align-items: flex-start;
+    .properties-list {
+        grid-template-columns: 1fr; /* Single column on smaller screens */
     }
-}
 
-/* Dropdown Menu */
-.dropdown-menu {
-    display: none; /* Hide by default */
-    position: absolute;
-    background-color: var(--primary-color) !important; /* Match navbar background color */
-    border: none; /* Remove border */
-    z-index: 1000;
-    color: #fff; /* Match navbar text color */
-}
-
-.dropdown-menu a {
-    color: #fff; /* Match navbar text color */
-    padding: 0.5rem 1rem;
-    text-decoration: none;
-    display: block;
-    transition: background-color 0.3s ease;
-}
-
-.dropdown-menu a:hover {
-    background-color: var(--accent-color); /* Use accent color for hover */
-    color: #fff; /* Ensure text remains white */
-}
-
-.dropdown-menu.show {
-    display: block; /* Show when active */
+    .course-grid {
+        grid-template-columns: 1fr; /* Single column on smaller screens */
+    }
 }

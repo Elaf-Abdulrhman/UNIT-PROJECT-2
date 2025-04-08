@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
+from django.contrib import messages
 from .forms import (
     UserRegistrationForm,
     CourseForm,
@@ -42,6 +43,10 @@ class CustomLoginView(LoginView):
         if request.user.is_authenticated:
             return redirect('home')
         return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.success(self.request, 'You have successfully logged in!')
+        return super().form_valid(form)
 
 
 # User Profile
@@ -90,6 +95,7 @@ def complete_quiz(request, quiz_id):
 # Logout
 def custom_logout(request):
     logout(request)
+    messages.success(request, 'You have successfully logged out!')
     return redirect('home')
 
 
@@ -101,7 +107,7 @@ def about(request):
 # Course Management
 def course_list(request):
     courses = Course.objects.all()
-    return render(request, 'training/course_list.html', {'courses': courses})
+    return render(request, 'training/courses/course_list.html', {'courses': courses})
 
 
 @login_required
@@ -115,7 +121,7 @@ def course_add(request):
             return redirect('course_list')
     else:
         form = CourseForm()
-    return render(request, 'training/course_add.html', {'form': form})
+    return render(request, 'training/courses/course_add.html', {'form': form})
 
 
 @login_required
@@ -128,7 +134,7 @@ def course_edit(request, pk):
             return redirect('course_list')
     else:
         form = CourseForm(instance=course)
-    return render(request, 'training/course_form.html', {'form': form})
+    return render(request, 'courses/course_form.html', {'form': form})
 
 
 @login_required
@@ -137,14 +143,14 @@ def course_delete(request, pk):
     if request.method == 'POST':
         course.delete()
         return redirect('course_list')
-    return render(request, 'training/course_confirm_delete.html', {'course': course})
+    return render(request, 'courses/course_confirm_delete.html', {'course': course})
 
 
 @login_required
 def enrolled_employees(request, course_id):
     course = get_object_or_404(Course, id=course_id, trainer=request.user)
     employees = course.enrolled_employees.all()
-    return render(request, 'training/enrolled_employees.html', {'course': course, 'employees': employees})
+    return render(request, 'data_analysis/enrolled_employees.html', {'course': course, 'employees': employees})
 
 
 @login_required
@@ -159,7 +165,7 @@ def track_progress(request, course_id):
         }
         for employee in employees
     ]
-    return render(request, 'training/track_progress.html', {'course': course, 'progress_data': progress_data})
+    return render(request, 'data_analysis/track_progress.html', {'course': course, 'progress_data': progress_data})
 
 
 # Enroll in Course
@@ -218,3 +224,30 @@ def add_question(request, quiz_id):
     else:
         form = QuestionForm()
     return render(request, 'training/add_question.html', {'form': form, 'quiz': quiz})
+
+
+# Course Detail
+def course_detail(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    return render(request, 'training/course_detail.html', {'course': course})
+
+
+# Quiz Detail
+def quiz_detail(request, quiz_id):
+    quiz = get_object_or_404(Quiz, id=quiz_id)
+    return render(request, 'training/quiz_detail.html', {'quiz': quiz})
+
+
+# Signup
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your account has been created successfully!')
+            return redirect('login')  # Redirect to login page after successful signup
+    else:
+        form = UserCreationForm()
+    return render(request, 'training/signup.html', {'form': form})
+
+

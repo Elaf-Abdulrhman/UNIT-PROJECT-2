@@ -20,19 +20,21 @@ class CustomUser(AbstractUser):
 class Course(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
+    image = models.ImageField(upload_to='course_images/', blank=True, null=True)  # Image field
     start_date = models.DateField()
     end_date = models.DateField()
-    materials = models.FileField(upload_to='course_materials/', blank=True, null=True)
     trainer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='courses')
     enrolled_employees = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='enrolled_courses', blank=True)
-    
+    pre_test = models.ForeignKey('Quiz', on_delete=models.SET_NULL, related_name='pre_test_courses', blank=True, null=True)
+    post_test = models.ForeignKey('Quiz', on_delete=models.SET_NULL, related_name='post_test_courses', blank=True, null=True)
+    materials = models.TextField()  # Add this field if it is missing
+
     def __str__(self):
         return self.title
 
 
 # Quiz Model
 class Quiz(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='quizzes')
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)

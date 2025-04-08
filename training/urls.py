@@ -3,10 +3,12 @@
 from django.urls import path, include
 from . import views
 from django.contrib.auth import views as auth_views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.home, name='home'),  # Home page
-    path('register/', views.register, name='register'),
+    path('signup/', views.signup, name='signup'),
     path('login/', views.CustomLoginView.as_view(), name='login'),
     path('logout/', views.custom_logout, name='logout'),  
     path('dashboard/', views.dashboard, name='dashboard'),
@@ -26,4 +28,12 @@ urlpatterns = [
     path('quizzes/<int:quiz_id>/questions/add/', views.add_question, name='add_question'),
     path('courses/<int:course_id>/assignments/create/', views.create_assignment, name='create_assignment'),
     path('courses/', views.course_list, name='course_list'),
+    path('courses/<int:course_id>/', views.course_detail, name='course_detail'),
 ]
+
+urlpatterns += [
+    path('quizzes/<int:quiz_id>/', views.quiz_detail, name='quiz_detail'),
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
