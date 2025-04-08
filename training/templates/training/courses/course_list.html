@@ -6,6 +6,12 @@
 {% block content %}
     <div class="properties-container">
         <h2>Our Courses</h2>
+        <div class="search-bar">
+            <form method="get" action="{% url 'course_list' %}">
+                <input type="text" name="search" placeholder="Search for courses..." value="{{ request.GET.search }}">
+                <button type="submit">Search</button>
+            </form>
+        </div>
 
         <!-- New Course Button for Trainers -->
         {% if user.is_authenticated and user.role == 'trainer' %}
@@ -23,6 +29,9 @@
                         <img src="{% static 'images/default.png' %}" alt="Default Image" class="course-image">
                     {% endif %}
                     <h3>{{ course.title }}</h3>
+                    <form action="{% url 'course_detail' course.id %}" method="get">
+                        <button type="submit">View Details</button>
+                    </form>
                     {% if user.is_authenticated and user.role == 'employee' %}
                         <form action="{% url 'start_course' course.id %}" method="get">
                             <button type="submit">Enroll</button>

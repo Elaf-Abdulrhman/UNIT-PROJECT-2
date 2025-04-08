@@ -28,16 +28,11 @@ urlpatterns = [
     path('courses/<int:course_id>/progress/', views.track_progress, name='track_progress'),
     path('courses/enroll/<int:course_id>/', views.enroll_course, name='enroll_course'),
     path('courses/<int:course_id>/quizzes/create/', views.create_quiz, name='create_quiz'),
-    path('quizzes/<int:quiz_id>/questions/add/', views.add_question, name='add_question'),
-    path('courses/<int:course_id>/assignments/create/', views.create_assignment, name='create_assignment'),
     path('courses/', views.course_list, name='course_list'),
     path('courses/<int:course_id>/', views.course_detail, name='course_detail'),
     path('start-course/<int:course_id>/', views.start_course, name='start_course'),
     path('courses/<int:course_id>/quiz/<str:quiz_type>/', views.solve_quiz, name='solve_quiz'),
-]
-
-urlpatterns += [
-    path('quizzes/<int:quiz_id>/', views.quiz_detail, name='quiz_detail'),
+    path('courses/<int:course_id>/quiz/<str:quiz_type>/create/', views.create_quiz, name='create_quiz'),
 ]
 
 if settings.DEBUG:

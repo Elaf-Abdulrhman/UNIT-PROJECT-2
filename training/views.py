@@ -160,70 +160,43 @@ def enroll_course(request, course_id):
         return HttpResponseForbidden("You are not allowed to enroll in this course.")
 
 
-# Quiz Management
 @login_required
-def create_quiz(request, course_id):
-    course = get_object_or_404(Course, id=course_id, trainer=request.user)
+def create_quiz(request, course_id, quiz_type):
+    course = get_object_or_404(Course, pk=course_id)
+
+    # Ensure only the trainer of the course can add quizzes
+    if request.user != course.trainer:
+        return redirect('course_list')
+
     if request.method == 'POST':
         form = QuizForm(request.POST)
         if form.is_valid():
             quiz = form.save(commit=False)
-            quiz.course = course
+            quiz.created_by = request.user
             quiz.save()
+
+            # Associate the quiz with the course
+            if quiz_type == 'pre':
+                course.pre_quiz = quiz
+            elif quiz_type == 'post':
+                course.post_quiz = quiz
+            course.save()
+
             return redirect('course_detail', course_id=course.id)
     else:
         form = QuizForm()
-    return render(request, 'training/create_quiz.html', {'form': form, 'course': course})
 
-
-# Assignment Management
-@login_required
-def create_assignment(request, course_id):
-    course = get_object_or_404(Course, id=course_id, trainer=request.user)
-    if request.method == 'POST':
-        form = AssignmentForm(request.POST, request.FILES)
-        if form.is_valid():
-            assignment = form.save(commit=False)
-            assignment.course = course
-            assignment.save()
-            return redirect('course_detail', course_id=course.id)
-    else:
-        form = AssignmentForm()
-    return render(request, 'training/create_assignment.html', {'form': form, 'course': course})
-
-
-# Add Question to Quiz
-def add_question(request, quiz_id):
-    quiz = get_object_or_404(Quiz, id=quiz_id)
-    if request.method == 'POST':
-        form = QuestionForm(request.POST)
-        if form.is_valid():
-            question = form.save(commit=False)
-            question.quiz = quiz
-            question.save()
-            return redirect('quiz_detail', quiz_id=quiz.id)
-    else:
-        form = QuestionForm()
-    return render(request, 'training/add_question.html', {'form': form, 'quiz': quiz})
+    return render(request, 'quizes/create_quiz.html', {'form': form, 'course': course, 'quiz_type': quiz_type})
 
 
 # Course Detail
 def course_detail(request, course_id):
-    course = get_object_or_404(Course, id=course_id)
-    return render(request, 'training/course_detail.html', {'course': course})
-
-
-# Quiz Detail
-def quiz_detail(request, quiz_id):
-    quiz = get_object_or_404(Quiz, id=quiz_id)
-    return render(request, 'training/quiz_detail.html', {'quiz': quiz})
+    course = get_object_or_404(Course, pk=course_id)
+    return render(request, 'training/courses/course_detail.html', {'course': course})
 
 
 def services(request):
     return render(request, 'training/services.html')
-
-
-from django.contrib.auth.views import LoginView
 
 class CustomLoginView(LoginView):
     template_name = 'training/signup_signin/login.html'  # Path to your login.html
@@ -251,9 +224,6 @@ def solve_quiz(request, course_id, quiz_type):
         quiz = course.post_quiz
     else:
         return redirect('course_list')  # Redirect if quiz_type is invalid
-
-    if not quiz:
-        return render(request, 'training/quizzes/no_quiz.html', {'quiz_type': quiz_type})
 
     if request.method == 'POST':
         # Logic to handle quiz submission (e.g., calculate score, save progress)

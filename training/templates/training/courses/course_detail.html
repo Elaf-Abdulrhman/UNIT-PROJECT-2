@@ -1,35 +1,58 @@
 {% extends 'training/base.html' %}
 
-{% block title %}{{ course.title }}{% endblock %}
+{% block title %}Course Details{% endblock %}
 
 {% block content %}
-<div class="container my-5">
-    <h1 class="mb-4">{{ course.title }}</h1>
-    <div class="row">
-        <div class="col-md-6">
-            {% if course.image %}
-                <img src="{{ course.image.url }}" alt="{{ course.title }}" class="img-fluid rounded">
+<div class="container mt-5">
+    <h1 class="text-center">{{ course.title }}</h1>
+    <p>{{ course.description }}</p>
+    {% if course.image %}
+        <img src="{{ course.image.url }}" alt="{{ course.title }}" class="img-fluid">
+    {% endif %}
+    <p><strong>Start Date:</strong> {{ course.start_date }}</p>
+    <p><strong>End Date:</strong> {{ course.end_date }}</p>
+    <p><strong>Trainer:</strong> {{ course.trainer.username }}</p>
+
+    <!-- Section for Employees -->
+    {% if user.is_authenticated and user.role == 'employee' %}
+        <form action="{% url 'start_course' course.id %}" method="get">
+            <button type="submit" class="btn btn-primary">Start Course</button>
+        </form>
+        {% if course.pre_quiz %}
+            <a href="{% url 'solve_quiz' course.id 'pre' %}" class="btn btn-info mt-3">Solve Pre-Quiz</a>
+        {% endif %}
+        {% if course.post_quiz %}
+            <a href="{% url 'solve_quiz' course.id 'post' %}" class="btn btn-info mt-3">Solve Post-Quiz</a>
+        {% endif %}
+    {% endif %}
+
+    <!-- Section for Trainers -->
+    {% if user.is_authenticated and user == course.trainer %}
+        <a href="{% url 'course_edit' course.id %}" class="btn btn-warning">Edit Course</a>
+        <form action="{% url 'course_delete' course.id %}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this course?');">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete Course</button>
+        </form>
+
+        <!-- Add/Edit Pre-Quiz -->
+        <div class="mt-4">
+            {% if course.pre_quiz %}
+                <p><strong>Pre-Quiz:</strong> {{ course.pre_quiz.title }}</p>
+                <a href="{% url 'create_quiz' course.id 'pre' %}" class="btn btn-secondary">Edit Pre-Quiz</a>
             {% else %}
-                <p>No image available for this course.</p>
+                <a href="{% url 'create_quiz' course.id 'pre' %}" class="btn btn-primary">Add Pre-Quiz</a>
             {% endif %}
         </div>
-        <div class="col-md-6">
-            <p>{{ course.description }}</p>
-            <hr>
-            <h3>Pre-Test</h3>
-            {% if course.pre_test %}
-                <a href="{% url 'quiz_detail' course.pre_test.id %}" class="btn btn-primary">Take Pre-Test</a>
+
+        <!-- Add/Edit Post-Quiz -->
+        <div class="mt-4">
+            {% if course.post_quiz %}
+                <p><strong>Post-Quiz:</strong> {{ course.post_quiz.title }}</p>
+                <a href="{% url 'create_quiz' course.id 'post' %}" class="btn btn-secondary">Edit Post-Quiz</a>
             {% else %}
-                <p>No pre-test available for this course.</p>
-            {% endif %}
-            <hr>
-            <h3>Post-Test</h3>
-            {% if course.post_test %}
-                <a href="{% url 'quiz_detail' course.post_test.id %}" class="btn btn-success">Take Post-Test</a>
-            {% else %}
-                <p>No post-test available for this course.</p>
+                <a href="{% url 'create_quiz' course.id 'post' %}" class="btn btn-primary">Add Post-Quiz</a>
             {% endif %}
         </div>
-    </div>
+    {% endif %}
 </div>
 {% endblock %}
