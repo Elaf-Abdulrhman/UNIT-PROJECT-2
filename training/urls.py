@@ -8,11 +8,12 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.home, name='home'),  # Home page
-    path('signup/', views.signup, name='signup'),
+    path('signup/', views.signup_view, name='signup'),
     path('login/', views.CustomLoginView.as_view(), name='login'),
     path('logout/', views.custom_logout, name='logout'),  
     path('dashboard/', views.dashboard, name='dashboard'),
     path('complete_quiz/<int:quiz_id>/', views.complete_quiz, name='complete_quiz'),
+    path('services/', views.services, name='services'),
     path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),

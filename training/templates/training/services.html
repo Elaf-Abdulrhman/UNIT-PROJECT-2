@@ -1,0 +1,52 @@
+{% extends 'training/base.html' %}
+{% load static %}
+
+{% block title %}Services{% endblock %}
+
+{% block content %}
+
+
+<!-- Hero Section -->
+<section class="services-hero">
+    <h1>Our Services</h1>
+</section>
+
+<!-- Services Section -->
+<section class="services-section">
+    <div class="container">
+        <h2 class="text-center mb-5">We offer a variety of services to help you succeed</h2>
+        <div class="row">
+            <!-- Service 1 -->
+            <div class="col-md-4 mb-4">
+                <div class="service-card">
+                    <img src="{% static 'images/service1.jpg' %}" alt="Service 1">
+                    <div class="service-card-body">
+                        <h3>Training Programs</h3>
+                        <p>Comprehensive training programs tailored to the oil & gas industry.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Service 2 -->
+            <div class="col-md-4 mb-4">
+                <div class="service-card">
+                    <img src="{% static 'images/service2.jpg' %}" alt="Service 2">
+                    <div class="service-card-body">
+                        <h3>Consulting Services</h3>
+                        <p>Expert consulting to optimize your business operations and workforce.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Service 3 -->
+            <div class="col-md-4 mb-4">
+                <div class="service-card">
+                    <img src="{% static 'images/service3.jpg' %}" alt="Service 3">
+                    <div class="service-card-body">
+                        <h3>Custom Solutions</h3>
+                        <p>Tailored solutions to meet your unique business challenges.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

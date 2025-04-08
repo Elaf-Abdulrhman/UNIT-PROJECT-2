@@ -31,20 +31,25 @@
             <ul class="navbar-nav">
                 <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Services</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'services'%}">Services</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'course_list' %}">Courses</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
             </ul>
         </nav>
         <!-- Buttons -->
         <div class="buttons">
-            <button class="signup">
-                <span class="material-icons">person</span> Sign Up
-            </button>            
-            <button class="signin">
-                Sign In
-            </button>
+            <a href="{% url 'signup' %}" class="signup-btn">
+                <button class="signup">
+                    <span class="material-icons">person</span> Sign Up
+                </button>
+            </a>
+            <a href="{% url 'login' %}" class="signin-btn">
+                <button class="signin">
+                    Sign In
+                </button>
+            </a>
         </div>
+        
     </div>
 
     <header>

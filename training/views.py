@@ -11,6 +11,7 @@ from .forms import (
     QuizForm,
     AssignmentForm,
     QuestionForm,
+    CustomUserCreationForm,
 )
 from .models import (
     Quiz,
@@ -21,32 +22,19 @@ from .models import (
     Question,
 )
 
+# views.py
+from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect
 
-# User Registration
-def register(request):
+def signup_view(request):
     if request.method == 'POST':
-        form = UserRegistrationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('home')
+            form.save()
+            return redirect('login')  # Redirect to login page after signup
     else:
-        form = UserRegistrationForm()
-    return render(request, 'training/register.html', {'form': form})
-
-
-# Custom Login View
-class CustomLoginView(LoginView):
-    template_name = 'training/login.html'
-
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return redirect('home')
-        return super().dispatch(request, *args, **kwargs)
-
-    def form_valid(self, form):
-        messages.success(self.request, 'You have successfully logged in!')
-        return super().form_valid(form)
+        form = CustomUserCreationForm()
+    return render(request, 'training/signup_signin/signup.html', {'form': form})
 
 
 # User Profile
@@ -238,16 +226,11 @@ def quiz_detail(request, quiz_id):
     return render(request, 'training/quiz_detail.html', {'quiz': quiz})
 
 
-# Signup
-def signup(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Your account has been created successfully!')
-            return redirect('login')  # Redirect to login page after successful signup
-    else:
-        form = UserCreationForm()
-    return render(request, 'training/signup.html', {'form': form})
+def services(request):
+    return render(request, 'training/services.html')
 
 
+from django.contrib.auth.views import LoginView
+
+class CustomLoginView(LoginView):
+    template_name = 'training/signup_signin/login.html'  # Path to your login.html

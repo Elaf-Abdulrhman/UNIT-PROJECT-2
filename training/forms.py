@@ -1,7 +1,7 @@
 # forms.py (in your app)
 
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import CustomUser, Course, Quiz, Assignment, TrainingModule, Question, InteractiveModule
 
 
@@ -12,6 +12,20 @@ class UserRegistrationForm(UserCreationForm):
     class Meta:
         model = CustomUser  # Use the custom user model
         fields = ['username', 'email', 'password1', 'password2', 'role']  # Include role if using CustomUser
+
+
+# Custom User Creation Form
+class CustomUserCreationForm(UserCreationForm):
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'email')  # Add any fields you want to include
+
+
+# Custom User Change Form
+class CustomUserChangeForm(UserChangeForm):
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'email')  # Add any fields you want to include
 
 
 # Quiz Form
