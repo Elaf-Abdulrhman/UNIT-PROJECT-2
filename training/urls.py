@@ -5,12 +5,13 @@ from . import views
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     path('', views.home, name='home'),  # Home page
     path('signup/', views.signup_view, name='signup'),
     path('login/', views.CustomLoginView.as_view(), name='login'),
-    path('logout/', views.custom_logout, name='logout'),  
+    path('logout/', LogoutView.as_view(next_page='home'), name='logout'),  # Redirect to home after logout
     path('dashboard/', views.dashboard, name='dashboard'),
     path('profile/', views.profile, name='profile'),
     path('complete_quiz/<int:quiz_id>/', views.complete_quiz, name='complete_quiz'),

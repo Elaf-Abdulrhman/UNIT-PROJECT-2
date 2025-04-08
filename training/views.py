@@ -82,13 +82,6 @@ def complete_quiz(request, quiz_id):
     return render(request, 'training/complete_quiz.html', {'quiz': quiz, 'form': form})
 
 
-# Logout
-def custom_logout(request):
-    logout(request)
-    messages.success(request, 'You have successfully logged out!')
-    return redirect('home')
-
-
 # About Page
 def about(request):
     return render(request, 'training/about.html')

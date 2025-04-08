@@ -41,16 +41,31 @@
         </nav>
         <!-- Buttons -->
         <div class="buttons">
-            <a href="{% url 'signup' %}" class="signup-btn">
-                <button class="signup">
-                    <span class="material-icons">person</span> Sign Up
-                </button>
-            </a>
-            <a href="{% url 'login' %}" class="signin-btn">
-                <button class="signin">
-                    Sign In
-                </button>
-            </a>
+            {% if user.is_authenticated %}
+                <!-- Show Profile and Logout buttons for logged-in users -->
+                <a href="{% url 'profile' %}" class="profile-btn">
+                    <button class="profile">
+                        <span class="material-icons">person</span> Profile
+                    </button>
+                </a>
+                <a href="{% url 'logout' %}" class="logout-btn">
+                    <button class="logout">
+                        <span class="material-icons">logout</span> Logout
+                    </button>
+                </a>
+            {% else %}
+                <!-- Show Sign Up and Sign In buttons for guests -->
+                <a href="{% url 'signup' %}" class="signup-btn">
+                    <button class="signup">
+                        <span class="material-icons">person</span> Sign Up
+                    </button>
+                </a>
+                <a href="{% url 'login' %}" class="signin-btn">
+                    <button class="signin">
+                        Sign In
+                    </button>
+                </a>
+            {% endif %}
         </div>
         
     </div>
