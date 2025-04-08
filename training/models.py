@@ -8,9 +8,13 @@ class CustomUser(AbstractUser):
     ROLE_CHOICES = [
         ('employee', 'Employee'),
         ('trainer', 'Trainer'),
-        ('admin', 'Admin'),
     ]
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='employee')
+    enrolled_courses = models.ManyToManyField(
+        'Course',
+        blank=True,
+        related_name='enrolled_by_users'  # Unique related_name for reverse query
+    )
 
     def __str__(self):
         return self.username
@@ -20,14 +24,22 @@ class CustomUser(AbstractUser):
 class Course(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
-    image = models.ImageField(upload_to='course_images/', blank=True, null=True)  # Image field
+    trainer = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name='created_courses'  # Unique related_name for trainers
+    )
+    enrolled_employees = models.ManyToManyField(
+        CustomUser,
+        blank=True,
+        related_name='enrolled_in_courses'  # Unique related_name for reverse query
+    )
+    image = models.ImageField(upload_to='course_images/', blank=True, null=True)
     start_date = models.DateField()
     end_date = models.DateField()
-    trainer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='courses')
-    enrolled_employees = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='enrolled_courses', blank=True)
     pre_test = models.ForeignKey('Quiz', on_delete=models.SET_NULL, related_name='pre_test_courses', blank=True, null=True)
     post_test = models.ForeignKey('Quiz', on_delete=models.SET_NULL, related_name='post_test_courses', blank=True, null=True)
-    materials = models.TextField()  # Add this field if it is missing
+    materials = models.TextField()
 
     def __str__(self):
         return self.title

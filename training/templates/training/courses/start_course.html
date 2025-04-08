@@ -1,0 +1,16 @@
+{% extends "training/base.html" %}
+{% load static %}
+
+{% block title %}Start Course{% endblock %}
+
+{% block content %}
+<h2>Starting Course: {{ course.title }}</h2>
+<p>{{ course.description }}</p>
+
+{% if user.is_authenticated %}
+    <p>Welcome, {{ user.username }}! You can now begin the course.</p>
+    <a href="#" class="btn btn-primary">Begin Lesson</a>
+{% else %}
+    <p>Please <a href="{% url 'login' %}">log in</a> to start the course.</p>
+{% endif %}
+{% endblock %}

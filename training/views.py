@@ -40,15 +40,17 @@ def signup_view(request):
 # User Profile
 @login_required
 def profile(request):
-    user = request.user
-    if request.method == 'POST':
-        form = UserRegistrationForm(request.POST, instance=user)
-        if form.is_valid():
-            form.save()
-            return redirect('profile')
+    if request.user.role == 'employee':
+        # Fetch courses the employee is enrolled in
+        enrolled_courses = request.user.enrolled_courses.all()  # Assuming a ManyToManyField for enrolled courses
+        return render(request, 'training/profile.html', {'courses': enrolled_courses, 'role': 'employee'})
+    elif request.user.role == 'trainer':
+        # Fetch courses created by the trainer
+        created_courses = Course.objects.filter(trainer=request.user)
+        return render(request, 'training/profile.html', {'courses': created_courses, 'role': 'trainer'})
     else:
-        form = UserRegistrationForm(instance=user)
-    return render(request, 'training/profile.html', {'form': form})
+        # Handle other roles or unauthorized access
+        return render(request, 'training/profile.html', {'courses': [], 'role': 'unknown'})
 
 
 # Homepage
@@ -234,3 +236,11 @@ from django.contrib.auth.views import LoginView
 
 class CustomLoginView(LoginView):
     template_name = 'training/signup_signin/login.html'  # Path to your login.html
+
+
+@login_required
+def start_course(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    return render(request, 'training/courses/start_course.html', {'course': course})
+
+

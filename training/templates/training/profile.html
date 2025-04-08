@@ -1,12 +1,61 @@
 <!-- profile.html -->
 
-{% extends 'base_generic.html' %}
+{% extends "training/base.html" %}
+{% load static %}
+
+{% block title %}Profile{% endblock %}
 
 {% block content %}
-  <h2>Profile</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Update Profile</button>
-  </form>
+<div class="container mt-5">
+    <h2>Welcome, {{ user.username }}</h2>
+    {% if role == 'employee' %}
+        <h3>Your Enrolled Courses</h3>
+        {% if courses %}
+            <div class="row">
+                {% for course in courses %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        {% if course.image %}
+                        <img src="{{ course.image.url }}" class="card-img-top course-image" alt="{{ course.title }}">
+                        {% else %}
+                        <img src="{% static 'images/default.png' %}" class="card-img-top course-image" alt="Default Image">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ course.title }}</h5>
+                            <p class="card-text">{{ course.description|truncatewords:20 }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>You are not enrolled in any courses yet.</p>
+        {% endif %}
+    {% elif role == 'trainer' %}
+        <h3>Courses You Created</h3>
+        {% if courses %}
+            <div class="row">
+                {% for course in courses %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        {% if course.image %}
+                        <img src="{{ course.image.url }}" class="card-img-top course-image" alt="{{ course.title }}">
+                        {% else %}
+                        <img src="{% static 'images/default.png' %}" class="card-img-top course-image" alt="Default Image">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ course.title }}</h5>
+                            <p class="card-text">{{ course.description|truncatewords:20 }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>You have not created any courses yet.</p>
+        {% endif %}
+    {% else %}
+        <p>Your role is not recognized.</p>
+    {% endif %}
+</div>
 {% endblock %}

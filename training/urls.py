@@ -12,6 +12,7 @@ urlpatterns = [
     path('login/', views.CustomLoginView.as_view(), name='login'),
     path('logout/', views.custom_logout, name='logout'),  
     path('dashboard/', views.dashboard, name='dashboard'),
+    path('profile/', views.profile, name='profile'),
     path('complete_quiz/<int:quiz_id>/', views.complete_quiz, name='complete_quiz'),
     path('services/', views.services, name='services'),
     path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
@@ -30,6 +31,7 @@ urlpatterns = [
     path('courses/<int:course_id>/assignments/create/', views.create_assignment, name='create_assignment'),
     path('courses/', views.course_list, name='course_list'),
     path('courses/<int:course_id>/', views.course_detail, name='course_detail'),
+    path('start-course/<int:course_id>/', views.start_course, name='start_course')
 ]
 
 urlpatterns += [
