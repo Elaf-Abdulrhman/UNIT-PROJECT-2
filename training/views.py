@@ -9,7 +9,6 @@ from .forms import (
     UserRegistrationForm,
     CourseForm,
     QuizForm,
-    AssignmentForm,
     QuestionForm,
     CustomUserCreationForm,
 )
@@ -18,7 +17,6 @@ from .models import (
     QuizResult,
     Progress,
     Course,
-    Assignment,
     Question,
 )
 
@@ -86,7 +84,7 @@ def about(request):
 # Course Management
 def course_list(request):
     courses = Course.objects.all()
-    return render(request, 'training/courses/course_list.html', {'courses': courses})
+    return render(request, 'courses/course_list.html', {'courses': courses})
 
 
 @login_required
@@ -100,7 +98,7 @@ def course_edit(request, pk):
     else:
         form = CourseForm(instance=course)
 
-    return render(request, 'training/courses/course_edit.html', {'form': form, 'course': course})
+    return render(request, 'courses/course_edit.html', {'form': form, 'course': course})
 
 
 @login_required
@@ -115,7 +113,7 @@ def course_add(request):
     else:
         form = CourseForm()
 
-    return render(request, 'training/courses/course_add.html', {'form': form})
+    return render(request, 'courses/course_add.html', {'form': form})
 
 
 @login_required
@@ -124,7 +122,7 @@ def course_delete(request, pk):
     if request.method == 'POST':
         course.delete()
         return redirect('course_list')  # Redirect to the course list after deletion
-    return render(request, 'training/courses/course_delete.html', {'course': course})
+    return render(request, 'courses/course_delete.html', {'course': course})
 
 
 @login_required
@@ -164,7 +162,7 @@ def enroll_course(request, course_id):
 def create_quiz(request, course_id, quiz_type):
     course = get_object_or_404(Course, pk=course_id)
 
-    # Ensure only the trainer of the course can add quizzes
+    # Ensure only the trainer of the course can add quizes
     if request.user != course.trainer:
         return redirect('course_list')
 
@@ -186,13 +184,13 @@ def create_quiz(request, course_id, quiz_type):
     else:
         form = QuizForm()
 
-    return render(request, 'quizes/create_quiz.html', {'form': form, 'course': course, 'quiz_type': quiz_type})
+    return render(request, 'training/quizes/create_quiz.html', {'form': form, 'course': course, 'quiz_type': quiz_type})
 
 
 # Course Detail
 def course_detail(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
-    return render(request, 'training/courses/course_detail.html', {'course': course})
+    return render(request, 'courses/course_detail.html', {'course': course})
 
 
 def services(request):
@@ -212,7 +210,7 @@ def start_course(request, course_id):
         image=None,
         # Remove 'start_date' and 'end_date' if they are being passed here
     )
-    return render(request, 'training/courses/start_course.html', {'course': course})
+    return render(request, 'courses/start_course.html', {'course': course})
 
 
 @login_required
@@ -229,6 +227,6 @@ def solve_quiz(request, course_id, quiz_type):
         # Logic to handle quiz submission (e.g., calculate score, save progress)
         return redirect('course_list')  # Redirect after solving the quiz
 
-    return render(request, 'training/quizzes/solve_quiz.html', {'quiz': quiz, 'quiz_type': quiz_type})
+    return render(request, 'training/quizes/solve_quiz.html', {'quiz': quiz, 'quiz_type': quiz_type})
 
 

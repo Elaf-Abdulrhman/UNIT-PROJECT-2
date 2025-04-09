@@ -82,10 +82,10 @@ nav {
     transition: transform 0.3s ease; /* Smooth transition for scaling */
 }
 
-/* Hover effect for nav bar */
+/* Hover effect for nav bar 
 nav:hover {
-    transform: scale(1.05); /* Scale up the entire navbar slightly */
-}
+    transform: scale(1.05); /* Scale up the entire navbar slightly 
+}*/
 
 /* Style for the unordered list */
 .navbar-nav {

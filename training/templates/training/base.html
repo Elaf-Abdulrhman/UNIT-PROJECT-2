@@ -16,67 +16,66 @@
     <link href="https://fonts.googleapis.com/css2?family=Phudu:wght@300..900&display=swap" rel="stylesheet">
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
-<body class="light-mode" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('static/images/bg.png'); height: 100vh; background-size: cover;background-repeat: no-repeat;">
+<body class="light-mode" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('static/images/bg.png'); height: 100vh; background-size: cover; background-repeat: no-repeat;">
 
-    <!-- Container for logo, navigation bar, and sign-up button -->
-    <div class="header-container">
-        <!-- Logo -->
-        <section class="logo-container">
-            <a class="logo" style="text-transform: none;">PetroTrain</a>
-        </section>
-        <!-- Navigation bar -->
-        <nav class="navbar0">
-            <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'services'%}">Services</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'course_list' %}">Courses</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
-                {% if user.is_authenticated %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">Profile</a></li>
-                {% endif %}
-            </ul>
-        </nav>
-        <!-- Buttons -->
-        <div class="buttons">
-            {% if user.is_authenticated %}
-                <!-- Show Profile and Logout buttons for logged-in users -->
-                <a href="{% url 'profile' %}" class="profile-btn">
-                    <button class="profile">
-                        <span class="material-icons">person</span> Profile
-                    </button>
-                </a>
-                <form action="{% url 'logout' %}" method="post" style="display: inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="logout">
-                        <span class="material-icons">logout</span> Logout
-                    </button>
-                </form>
-            {% else %}
-                <!-- Show Sign Up and Sign In buttons for guests -->
-                <a href="{% url 'signup' %}" class="signup-btn">
-                    <button class="signup">
-                        <span class="material-icons">person</span> Sign Up
-                    </button>
-                </a>
-                <a href="{% url 'login' %}" class="signin-btn">
-                    <button class="signin">
-                        Sign In
-                    </button>
-                </a>
-            {% endif %}
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <!-- Logo -->
+            <a class="navbar-brand" href="{% url 'home' %}">PetroTrain</a>
+            <!-- Navbar toggler for mobile view -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Navbar links -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'services' %}">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'course_list' %}">Courses</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">Profile</a></li>
+                    {% endif %}
+                </ul>
+                <!-- Buttons -->
+                <div class="d-flex">
+                    {% if user.is_authenticated %}
+                        <!-- Show Profile and Logout buttons for logged-in users -->
+                        <a href="{% url 'profile' %}" class="btn btn-outline-light me-2">
+                            <span class="material-icons">person</span> Profile
+                        </a>
+                        <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger">
+                                <span class="material-icons">logout</span> Logout
+                            </button>
+                        </form>
+                    {% else %}
+                        <!-- Show Sign Up and Sign In buttons for guests -->
+                        <a href="{% url 'signup' %}" class="btn btn-outline-light me-2">
+                            <span class="material-icons">person</span> Sign Up
+                        </a>
+                        <a href="{% url 'login' %}" class="btn btn-outline-primary">
+                            Sign In
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
         </div>
-        
-    </div>
+    </nav>
 
     <header>
         <!-- Header content -->
     </header>
 
     <main>
-        <div class="container mt-5" id="content-container">
+        <div class="container mt-5 pt-5" id="content-container">
             <!-- Content block -->
             {% block content %}
             <!-- Some content -->
@@ -84,26 +83,22 @@
         </div>
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Function to handle light/dark mode toggle
-        function toggleTheme(isDarkMode) {
-            if (isDarkMode) {
-                document.body.classList.remove('light-mode');
-                document.body.classList.add('dark-mode');
-                
-                // Change the background for dark mode
-                document.body.style.backgroundImage = "url('{% static 'resources/skyscraper_dark.jpg' %}')";
-            } else {
-                document.body.classList.remove('dark-mode');
-                document.body.classList.add('light-mode');
-                
-                // Change the background for light mode
-                document.body.style.backgroundImage = "url('{% static 'resources/skyscraper.jpeg' %}')";
-            }
-        }
+        document.addEventListener("DOMContentLoaded", function () {
+            var videoModal = document.getElementById('videoModal');
+            var videoIframe = document.getElementById('youtubeVideo');
+            var videoSrc = "https://www.youtube.com/embed/F1f6VO7Slhk";
 
+            videoModal.addEventListener('show.bs.modal', function () {
+                videoIframe.src = videoSrc;
+            });
+
+            videoModal.addEventListener('hidden.bs.modal', function () {
+                videoIframe.src = "";
+            });
+        });
     </script>
-
 </body>
 
 </html>

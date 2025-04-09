@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
-from django.contrib.auth import get_user_model
 
 
 # Custom User model for Employee, Trainer, Admin roles
@@ -21,6 +20,12 @@ class CustomUser(AbstractUser):
 class Quiz(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
+    course = models.ForeignKey('training.Course', on_delete=models.CASCADE, related_name='quizzes')  # String reference
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='created_quizzes'
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -39,20 +44,6 @@ class Course(models.Model):
     image = models.ImageField(upload_to='course_images/', blank=True, null=True)
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
-    pre_quiz = models.ForeignKey(
-        Quiz,
-        on_delete=models.SET_NULL,
-        related_name='pre_quiz_courses',
-        blank=True,
-        null=True
-    )
-    post_quiz = models.ForeignKey(
-        Quiz,
-        on_delete=models.SET_NULL,
-        related_name='post_quiz_courses',
-        blank=True,
-        null=True
-    )
 
     def __str__(self):
         return self.title
@@ -81,18 +72,6 @@ class QuizResult(models.Model):
 
     def __str__(self):
         return f'{self.user.username} - {self.quiz.title} - {self.score}'
-
-
-# Assignment Model
-class Assignment(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='assignments')
-    title = models.CharField(max_length=200)
-    description = models.TextField()
-    due_date = models.DateField()
-    file_upload = models.FileField(upload_to='assignments/', blank=True, null=True)
-
-    def __str__(self):
-        return self.title
 
 
 # Interactive Module Model
@@ -146,4 +125,3 @@ class Progress(models.Model):
 
     def __str__(self):
         return f'{self.user.username} - {self.module.course.title} - {self.status}'
-

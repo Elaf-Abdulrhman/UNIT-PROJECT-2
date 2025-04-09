@@ -2,7 +2,7 @@
 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import CustomUser, Course, Quiz, Assignment, TrainingModule, Question, InteractiveModule
+from .models import CustomUser, Course, Quiz,TrainingModule, Question, InteractiveModule
 
 
 # User Registration Form
@@ -42,16 +42,6 @@ class QuizForm(forms.ModelForm):
     class Meta:
         model = Quiz
         fields = ['title', 'description']
-
-
-# Assignment Form
-class AssignmentForm(forms.ModelForm):
-    class Meta:
-        model = Assignment
-        fields = ['title', 'description', 'due_date', 'file_upload']  # Include file_upload
-        widgets = {
-            'due_date': forms.DateInput(attrs={'type': 'date'}),
-        }
 
 
 # Training Module Form

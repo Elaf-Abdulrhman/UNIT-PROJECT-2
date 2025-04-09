@@ -1,11 +1,10 @@
 from django.contrib import admin
-from .models import Course, Quiz, TrainingModule, QuizResult, Progress, CustomUser  # Import all models
+from .models import Course, Quiz, Question, Answer
 
-# Register all models
-admin.site.register(TrainingModule)
-admin.site.register(QuizResult)
-admin.site.register(Progress)
-admin.site.register(CustomUser)
+admin.site.register(Course)
+admin.site.register(Quiz)
+admin.site.register(Question)
+admin.site.register(Answer)
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
