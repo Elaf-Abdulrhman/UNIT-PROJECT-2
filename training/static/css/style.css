@@ -3,63 +3,6 @@
     margin-top: 10px;
     font-weight: bold;
 }
-
-
-body.dark-mode h1{
-    color:#ffffff;
-}
-body.dark-mode p{
-    color:#ffffff;
-    font-weight: light;
-}
-body.dark-mode nav {
-    font-weight: normal;
-    background-color: rgb(28, 27, 27);  /* Background for nav bar */
-    padding: 10px 50px;          /* Padding around the nav bar */
-    border-radius: 30px;      /* Circular edges for the navbar */
-    margin: 0;                /* Remove horizontal margin */
-    display: flex;            /* Use flexbox to align items in a row */
-    justify-content: center;  /* Center the items horizontally */
-    align-items: center;      /* Align items vertically in the middle */
-    box-shadow: none;         /* Remove the box-shadow */
-    transition: transform 0.3s ease; /* Smooth transition for scaling */
-}
-
-body.dark-mode .nav-link {
-    text-decoration: none;  /* Remove underline from links */
-    color: rgb(255, 255, 255);           /* Text color */
-    font-weight: lighter;   /* Lighter font weight for nav items */
-    padding: 10px 10px;     /* Reduce padding around the links */
-    transition: color 0.3s ease, transform 0.3s ease; /* Smooth transitions for color and transform */
-}
-
-body.dark-mode .signup {
-    display: flex;
-    align-items: center;
-    background-color: transparent; /* Transparent background */
-    color: rgb(255, 255, 255);
-    border: none;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: color 0.3s ease;
-    margin-left: 10px; /* Add some space between buttons */
-}
-
-body.dark-mode /* Style for the mode-toggle button */
-.mode-toggle {
-    display: flex;
-    align-items: center;
-    background-color: transparent; /* Transparent background */
-    color: rgb(255, 255, 255);
-    border: none;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: color 0.3s ease;
-    margin-left: 10px; /* Add some space between buttons */
-}
-body.dark-mode h3{
-    color:#ffffff;
-}
 /* Container for logo, nav, and sign-up button */
 .header-container {
     display: flex;
@@ -141,16 +84,6 @@ nav:hover {
     text-transform: uppercase;
     font-size: 2rem; /* Increase the font size */
     margin-left: 30px;
-}
-
-/* Style for the h1 element */
-.home h1 {
-    text-transform: capitalize; /* Capitalize the text */
-    margin-top: 20px;           /* Adjust the top margin */
-    text-align: center;         /* Center the text */
-    font-size: 2.5rem;          /* Set the font size */
-    color: #333;                /* Set the text color */
-    text-align: left;
 }
 
 /* Style for the paragraph element */
@@ -376,11 +309,6 @@ body .contact{
     text-align: center;
 }
 
-.services-hero h1 {
-    font-size: 3rem;
-    font-weight: bold;
-    text-transform: uppercase;
-}
 
 .services-section {
     padding: 50px 0;

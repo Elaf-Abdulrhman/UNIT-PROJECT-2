@@ -26,46 +26,48 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container-fluid">
             <!-- Logo -->
-            <a class="navbar-brand" href="{% url 'home' %}">PetroTrain</a>
+            <a class="navbar-brand fw-bold text-uppercase ps-5" href="{% url 'home' %}" style="font-size: 1.8rem;">
+                PetroTrain
+            </a>
             <!-- Navbar toggler for mobile view -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <!-- Navbar links -->
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'services' %}">Services</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'course_list' %}">Courses</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link pe-10" href="{% url 'home' %}" style="font-size: 1rem;">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'about' %}" style="font-size: 1rem;">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'services' %}" style="font-size: 1rem;">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'course_list' %}" style="font-size: 1rem;">Courses</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}" style="font-size: 1rem;">Contact</a></li>
                     {% if user.is_authenticated %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">Profile</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}" style="font-size: 1rem;">Profile</a></li>
                     {% endif %}
                 </ul>
-                <!-- Buttons -->
-                <div class="d-flex">
-                    {% if user.is_authenticated %}
-                        <!-- Show Profile and Logout buttons for logged-in users -->
-                        <a href="{% url 'profile' %}" class="btn btn-outline-light me-2">
-                            <span class="material-icons">person</span> Profile
-                        </a>
-                        <form action="{% url 'logout' %}" method="post" style="display: inline;">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-outline-danger">
-                                <span class="material-icons">logout</span> Logout
-                            </button>
-                        </form>
-                    {% else %}
-                        <!-- Show Sign Up and Sign In buttons for guests -->
-                        <a href="{% url 'signup' %}" class="btn btn-outline-light me-2">
-                            <span class="material-icons">person</span> Sign Up
-                        </a>
-                        <a href="{% url 'login' %}" class="btn btn-outline-primary">
-                            Sign In
-                        </a>
-                    {% endif %}
-                </div>
+            </div>
+            <!-- Buttons -->
+            <div class="d-flex">
+                {% if user.is_authenticated %}
+                    <!-- Show Profile and Logout buttons for logged-in users -->
+                    <a href="{% url 'profile' %}" class="btn btn-outline-light me-2">
+                        <span class="material-icons">person</span> Profile
+                    </a>
+                    <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger">
+                            <span class="material-icons">logout</span> Logout
+                        </button>
+                    </form>
+                {% else %}
+                    <!-- Show Sign Up and Sign In buttons for guests -->
+                    <a href="{% url 'signup' %}" class="btn btn-outline-light me-2">
+                        <span class="material-icons">person</span> Sign Up
+                    </a>
+                    <a href="{% url 'login' %}" class="btn btn-outline-primary me-5">
+                        Sign In
+                    </a>
+                {% endif %}
             </div>
         </div>
     </nav>
