@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, User
 from django.conf import settings
 
 
@@ -14,22 +14,6 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
-
-
-# Quiz Model
-class Quiz(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField(blank=True, null=True)
-    course = models.ForeignKey('training.Course', on_delete=models.CASCADE, related_name='quizzes')  # String reference
-    created_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='created_quizzes'
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.title
 
 
 # Course Model
@@ -49,40 +33,50 @@ class Course(models.Model):
         return self.title
 
 
+# Quiz Model
+class Quiz(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True, null=True)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='quizzes')
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='created_quizzes'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+
 # Question Model
 class Question(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='questions')
     text = models.TextField()  # The question text
-    choice_1 = models.CharField(max_length=255)  # First option
-    choice_2 = models.CharField(max_length=255)  # Second option
-    choice_3 = models.CharField(max_length=255)  # Third option
-    choice_4 = models.CharField(max_length=255)  # Fourth option
-    correct_option = models.IntegerField(default=1)  # Correct option (1, 2, 3, or 4)
 
     def __str__(self):
         return self.text
 
 
-# QuizResult Model
-class QuizResult(models.Model):
+# Choice Model (Dynamic Choices for Questions)
+class Choice(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='choices')
+    text = models.CharField(max_length=200)  # The choice text
+    is_correct = models.BooleanField(default=False)  # Whether this choice is correct
+
+    def __str__(self):
+        return self.text
+
+
+# Quiz Result Model (Consolidated)
+class UserQuizAttempt(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='quiz_results')
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='results')
-    score = models.IntegerField()  # Store the user's score (out of 100 or max possible score)
+    score = models.FloatField()  # Store the user's score
     completed_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.user.username} - {self.quiz.title} - {self.score}'
-
-
-# Interactive Module Model
-class InteractiveModule(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='interactive_modules')
-    title = models.CharField(max_length=200)
-    description = models.TextField(blank=True, null=True)
-    content = models.TextField()  # HTML or rich text for interactive content
-
-    def __str__(self):
-        return self.title
 
 
 # Training Module Model
@@ -93,10 +87,10 @@ class TrainingModule(models.Model):
     description = models.TextField()
     content = models.TextField()  # HTML or rich text for module content
     duration = models.PositiveIntegerField(default=30, help_text="Duration in minutes")
-    created_at = models.DateTimeField(auto_now_add=True)  # Automatically set when the module is created
-    updated_at = models.DateTimeField(auto_now=True)  # Automatically update when the module is modified
-    is_active = models.BooleanField(default=True)  # To mark if the module is active or archived
-    thumbnail = models.ImageField(upload_to='module_thumbnails/', blank=True, null=True)  # Optional thumbnail for the module
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+    thumbnail = models.ImageField(upload_to='module_thumbnails/', blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -117,11 +111,20 @@ class Progress(models.Model):
     )
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='in_progress')
     score = models.FloatField(blank=True, null=True)  # Optional score
-    started_at = models.DateTimeField(auto_now_add=True)  # Automatically set when progress starts
-    time_spent = models.PositiveIntegerField(blank=True, null=True, help_text="Time spent in minutes")  # Track engagement time
-    updated_at = models.DateTimeField(auto_now=True)  # Automatically update when progress is modified
-    completed_at = models.DateTimeField(blank=True, null=True)  # Track when the module is completed
-    feedback = models.TextField(blank=True, null=True)  # Trainer comments or feedback
+    started_at = models.DateTimeField(auto_now_add=True)
+    time_spent = models.PositiveIntegerField(blank=True, null=True, help_text="Time spent in minutes")
+    updated_at = models.DateTimeField(auto_now=True)
+    completed_at = models.DateTimeField(blank=True, null=True)
+    feedback = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return f'{self.user.username} - {self.module.course.title} - {self.status}'
+        return f'{self.user.username} - {self.course.title} - {self.status}'
+
+
+class Enrollment(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # Use AUTH_USER_MODEL
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    enrolled_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user.username} enrolled in {self.course.title}'

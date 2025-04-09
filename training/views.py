@@ -5,18 +5,19 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 from django.contrib import messages
+from .forms import QuestionFormSet
 from .forms import (
-    UserRegistrationForm,
     CourseForm,
     QuizForm,
-    QuestionForm,
     CustomUserCreationForm,
 )
 from .models import (
-    Quiz,
-    QuizResult,
     Progress,
     Course,
+    Course, 
+    Quiz, 
+    UserQuizAttempt,
+    Enrollment,  
     Question,
 )
 
@@ -28,7 +29,7 @@ def signup_view(request):
             return redirect('login')  # Redirect to login page after signup
     else:
         form = CustomUserCreationForm()
-    return render(request, 'training/signup_signin/signup.html', {'form': form})
+    return render(request, 'signup_signin/signup.html', {'form': form})
 
 
 # User Profile
@@ -197,7 +198,7 @@ def services(request):
     return render(request, 'training/services.html')
 
 class CustomLoginView(LoginView):
-    template_name = 'training/signup_signin/login.html'  # Path to your login.html
+    template_name = 'signup_signin/login.html'  # Path to your login.html
 
 
 @login_required
@@ -213,20 +214,59 @@ def start_course(request, course_id):
     return render(request, 'courses/start_course.html', {'course': course})
 
 
+def show_quiz(request, course_id, quiz_type):
+    course = get_object_or_404(Course, id=course_id)
+    
+    # Check if user is enrolled
+    if not Enrollment.objects.filter(user=request.user, course=course).exists():
+        return redirect('course_detail', course_id=course.id)
+
+    # Get the quiz (pre or post)
+    is_pre = True if quiz_type == "pre" else False
+    quiz = Quiz.objects.filter(course=course, is_pre_course=is_pre).first()
+
+    if not quiz:
+        return render(request, 'quiz/not_found.html')
+
+    # Check if user already completed it
+    if UserQuizAttempt.objects.filter(user=request.user, quiz=quiz).exists():
+        return render(request, 'quiz/already_done.html')
+
+    return render(request, 'quiz/take_quiz.html', {'quiz': quiz})
+
+
 @login_required
-def solve_quiz(request, course_id, quiz_type):
-    course = get_object_or_404(Course, pk=course_id)
-    if quiz_type == 'pre':
-        quiz = course.pre_quiz
-    elif quiz_type == 'post':
-        quiz = course.post_quiz
-    else:
-        return redirect('course_list')  # Redirect if quiz_type is invalid
+#@user_passes_test(lambda u: u.is_staff)
+def create_quiz(request):
+    courses = Course.objects.all()
 
     if request.method == 'POST':
-        # Logic to handle quiz submission (e.g., calculate score, save progress)
-        return redirect('course_list')  # Redirect after solving the quiz
+        title = request.POST.get('title')
+        course_id = request.POST.get('course_id')
+        is_pre = request.POST.get('is_pre_course') == 'on'
 
-    return render(request, 'training/quizes/solve_quiz.html', {'quiz': quiz, 'quiz_type': quiz_type})
+        course = Course.objects.get(id=course_id)
+        quiz = Quiz.objects.create(title=title, course=course, is_pre_course=is_pre)
+        return redirect('add_questions', quiz_id=quiz.id)
 
+    return render(request, 'create_quiz.html', {'courses': courses})
 
+def add_questions(request, quiz_id):
+    quiz = get_object_or_404(Quiz, id=quiz_id)
+
+    if request.method == 'POST':
+        formset = QuestionFormSet(request.POST, queryset=Question.objects.none())
+
+        if formset.is_valid():
+            for form in formset:
+                question = form.save(commit=False)
+                question.quiz = quiz
+                question.save()
+            return redirect('dashboard')  # or redirect to 'add_choices' per question
+    else:
+        formset = QuestionFormSet(queryset=Question.objects.none())
+
+    return render(request, 'add_questions.html', {
+        'quiz': quiz,
+        'formset': formset
+    })

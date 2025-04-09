@@ -38,9 +38,9 @@
         <div class="mt-4">
             {% if course.pre_quiz %}
                 <p><strong>Pre-Quiz:</strong> {{ course.pre_quiz.title }}</p>
-                <a href="{% url 'create_quiz' course.id 'pre' %}" class="btn btn-secondary">Edit Pre-Quiz</a>
+                <a href="#" class="btn btn-secondary">Edit Pre-Quiz</a>
             {% else %}
-                <a href="{% url 'create_quiz' course.id 'pre' %}" class="btn btn-primary">Add Pre-Quiz</a>
+                <a href="{% url 'take_quiz' course.id 'pre' %}" class="btn btn-primary">Add Pre-Quiz</a>
             {% endif %}
         </div>
 
@@ -48,9 +48,9 @@
         <div class="mt-4">
             {% if course.post_quiz %}
                 <p><strong>Post-Quiz:</strong> {{ course.post_quiz.title }}</p>
-                <a href="{% url 'create_quiz' course.id 'post' %}" class="btn btn-secondary">Edit Post-Quiz</a>
+                <a href="#" class="btn btn-secondary">Edit Post-Quiz</a>
             {% else %}
-                <a href="{% url 'create_quiz' course.id 'post' %}" class="btn btn-primary">Add Post-Quiz</a>
+                <a href="{% url 'take_quiz' course.id 'post' %}" class="btn btn-primary">Add Post-Quiz</a>
             {% endif %}
         </div>
     {% endif %}

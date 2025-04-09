@@ -30,9 +30,9 @@ urlpatterns = [
     path('courses/', views.course_list, name='course_list'),
     path('courses/<int:course_id>/', views.course_detail, name='course_detail'),
     path('start-course/<int:course_id>/', views.start_course, name='start_course'),
-    path('courses/<int:course_id>/quiz/<str:quiz_type>/create/', views.create_quiz, name='create_quiz'),
-    path('courses/<int:course_id>/quiz/<str:quiz_type>/solve/', views.solve_quiz, name='solve_quiz'),
+    path('courses/<int:course_id>/quiz/<str:quiz_type>/', views.show_quiz, name='take_quiz'),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

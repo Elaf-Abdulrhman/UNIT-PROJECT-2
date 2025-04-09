@@ -2,7 +2,9 @@
 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import CustomUser, Course, Quiz,TrainingModule, Question, InteractiveModule
+from .models import CustomUser, Course, Quiz,TrainingModule, Question, Choice
+from django.forms import modelformset_factory, inlineformset_factory
+
 
 
 # User Registration Form
@@ -73,12 +75,27 @@ class CourseForm(forms.ModelForm):
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
-        fields = ['text', 'choice_1', 'choice_2', 'choice_3', 'choice_4', 'correct_option']
+        fields = ['text']  # Only include fields that exist in the Question model
 
-
-# Interactive Module Form
-class InteractiveModuleForm(forms.ModelForm):
+class ChoiceForm(forms.ModelForm):
     class Meta:
-        model = InteractiveModule
-        fields = ['title', 'description', 'content']
+        model = Choice
+        fields = ['text', 'is_correct']
+
+# Create a FormSet for multiple questions
+QuestionFormSet = modelformset_factory(
+    Question,
+    form=QuestionForm,
+    extra=3,  # You can adjust how many empty forms to show
+    can_delete=False
+)
+
+# Inline formset for choices (related to Question)
+ChoiceFormSet = inlineformset_factory(
+    Question,
+    Choice,
+    form=ChoiceForm,
+    extra=2,  # Default 2 choices per question
+    can_delete=False
+)
 
