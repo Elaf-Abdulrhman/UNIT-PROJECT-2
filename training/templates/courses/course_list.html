@@ -26,6 +26,14 @@
             </div>
         {% endif %}
 
+        {% if user.is_authenticated and user.role == 'trainer' %}
+            {% if course %}
+                <a href="{% url 'create_quiz' course.id 'pre' %}" class="btn btn-primary">Create Pre-Quiz</a>
+                <a href="{% url 'create_quiz' course.id 'post' %}" class="btn btn-secondary">Create Post-Quiz</a>
+            {% else %}
+                <p>No course selected for quiz creation.</p>
+            {% endif %}
+        {% endif %}
         <!-- Course List -->
         <div class="properties-list">
             {% if courses %}
@@ -43,7 +51,7 @@
                             <button type="submit">View Details</button>
                         </form>
                         {% if user.is_authenticated and user.role == 'employee' %}
-                            <form action="{% url 'start_course' course.id %}" method="get">
+                            <form action="#" method="get">
                                 <button type="submit">Enroll</button>
                             </form>
                         {% endif %}

@@ -2,7 +2,7 @@
 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import CustomUser, Course, Quiz,TrainingModule, Question, Choice
+from .models import CustomUser, Course
 from django.forms import modelformset_factory, inlineformset_factory
 
 
@@ -41,31 +41,7 @@ class CustomUserChangeForm(UserChangeForm):
         fields = ('username', 'email')  # Add any fields you want to include
 
 
-# Quiz Form
-class QuizForm(forms.ModelForm):
-    class Meta:
-        model = Quiz
-        fields = ['title', 'description']
-
-
-# Training Module Form
-class TrainingModuleForm(forms.ModelForm):
-    class Meta:
-        model = TrainingModule
-        fields = ['title', 'description', 'content']
-
-
 class CourseForm(forms.ModelForm):
-    pre_quiz = forms.ModelChoiceField(
-        queryset=Quiz.objects.all(),
-        required=False,
-        label="Pre-Quiz"
-    )
-    post_quiz = forms.ModelChoiceField(
-        queryset=Quiz.objects.all(),
-        required=False,
-        label="Post-Quiz"
-    )
     
     # Custom date input format for start_date and end_date
     start_date = forms.DateField(
@@ -79,33 +55,6 @@ class CourseForm(forms.ModelForm):
 
     class Meta:
         model = Course
-        fields = ['title', 'description', 'image', 'start_date', 'end_date', 'pre_quiz', 'post_quiz']
+        fields = ['title', 'description', 'image', 'start_date', 'end_date']
 
-# Question Form
-class QuestionForm(forms.ModelForm):
-    class Meta:
-        model = Question
-        fields = ['text']  # Only include fields that exist in the Question model
-
-class ChoiceForm(forms.ModelForm):
-    class Meta:
-        model = Choice
-        fields = ['text', 'is_correct']
-
-# Create a FormSet for multiple questions
-QuestionFormSet = modelformset_factory(
-    Question,
-    form=QuestionForm,
-    extra=3,  # You can adjust how many empty forms to show
-    can_delete=False
-)
-
-# Inline formset for choices (related to Question)
-ChoiceFormSet = inlineformset_factory(
-    Question,
-    Choice,
-    form=ChoiceForm,
-    extra=2,  # Default 2 choices per question
-    can_delete=False
-)
 

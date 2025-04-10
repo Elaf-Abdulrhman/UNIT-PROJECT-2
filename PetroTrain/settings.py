@@ -57,7 +57,7 @@ ROOT_URLCONF = 'PetroTrain.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'training/templates'],  # Ensure this path is correct
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
