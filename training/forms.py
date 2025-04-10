@@ -52,8 +52,6 @@ class TrainingModuleForm(forms.ModelForm):
         model = TrainingModule
         fields = ['title', 'description', 'content']
 
-
-# Course Form
 class CourseForm(forms.ModelForm):
     pre_quiz = forms.ModelChoiceField(
         queryset=Quiz.objects.all(),
@@ -65,11 +63,20 @@ class CourseForm(forms.ModelForm):
         required=False,
         label="Post-Quiz"
     )
+    
+    # Custom date input format for start_date and end_date
+    start_date = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date'}),
+        label="Start Date"
+    )
+    end_date = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date'}),
+        label="End Date"
+    )
 
     class Meta:
         model = Course
         fields = ['title', 'description', 'image', 'start_date', 'end_date', 'pre_quiz', 'post_quiz']
-
 
 # Question Form
 class QuestionForm(forms.ModelForm):

@@ -83,8 +83,13 @@ def about(request):
 
 # Course Management
 def course_list(request):
-    courses = Course.objects.all()
-    return render(request, 'courses/course_list.html', {'courses': courses})
+    search_query = request.GET.get('search', '')  # Get the search query from the request
+    if search_query:
+        # Use icontains for case-insensitive partial matching
+        courses = Course.objects.filter(title__icontains=search_query)
+    else:
+        courses = Course.objects.all()  # Show all courses if no search query
+    return render(request, 'courses/course_list.html', {'courses': courses, 'search_query': search_query})
 
 
 @login_required

@@ -8,7 +8,7 @@
         <h2>Our Courses</h2>
         <div class="search-bar">
             <form method="get" action="{% url 'course_list' %}">
-                <input type="text" name="search" placeholder="Search for courses..." value="{{ request.GET.search }}">
+                <input type="text" name="search" placeholder="Search for courses..." value="{{ search_query }}">
                 <button type="submit">Search</button>
             </form>
         </div>
@@ -21,33 +21,37 @@
         {% endif %}
 
         <div class="properties-list">
-            {% for course in courses %}
-                <div class="property-item">
-                    {% if course.image %}
-                        <img src="{{ course.image.url }}" alt="{{ course.title }}" class="course-image">
-                    {% else %}
-                        <img src="{% static 'images/default.png' %}" alt="Default Image" class="course-image">
-                    {% endif %}
-                    <h3>{{ course.title }}</h3>
-                    <form action="{% url 'course_detail' course.id %}" method="get">
-                        <button type="submit">View Details</button>
-                    </form>
-                    {% if user.is_authenticated and user.role == 'employee' %}
-                        <form action="{% url 'start_course' course.id %}" method="get">
-                            <button type="submit">Enroll</button>
+            {% if courses %}
+                {% for course in courses %}
+                    <div class="property-item">
+                        {% if course.image %}
+                            <img src="{{ course.image.url }}" alt="{{ course.title }}" class="course-image">
+                        {% else %}
+                            <img src="{% static 'images/default.png' %}" alt="Default Image" class="course-image">
+                        {% endif %}
+                        <h3>{{ course.title }}</h3>
+                        <form action="{% url 'course_detail' course.id %}" method="get">
+                            <button type="submit">View Details</button>
                         </form>
-                    {% endif %}
-                    {% if user.is_authenticated and user.role == 'trainer' %}
-                        <form action="{% url 'course_edit' course.id %}" method="get">
-                            <button type="submit">Edit</button>
-                        </form>
-                        <form action="{% url 'course_delete' course.id %}" method="post" onsubmit="return confirmDelete();">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
-                    {% endif %}
-                </div>
-            {% endfor %}
+                        {% if user.is_authenticated and user.role == 'employee' %}
+                            <form action="{% url 'start_course' course.id %}" method="get">
+                                <button type="submit">Enroll</button>
+                            </form>
+                        {% endif %}
+                        {% if user.is_authenticated and user.role == 'trainer' %}
+                            <form action="{% url 'course_edit' course.id %}" method="get">
+                                <button type="submit">Edit</button>
+                            </form>
+                            <form action="{% url 'course_delete' course.id %}" method="post" onsubmit="return confirmDelete();">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No courses found matching your search criteria.</p>
+            {% endif %}
         </div>
     </div>
 
