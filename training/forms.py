@@ -13,16 +13,18 @@ class UserRegistrationForm(UserCreationForm):
 
     class Meta:
         model = CustomUser  # Use the custom user model
-        fields = ['username', 'email', 'password1', 'password2', 'role']  # Include role if using CustomUser
+        fields = ['username', 'email', 'password1', 'password2', 'role', 'first_name', 'last_name'] 
 
 
 # Custom User Creation Form
 class CustomUserCreationForm(UserCreationForm):
     role = forms.ChoiceField(choices=CustomUser.ROLE_CHOICES, required=True, label="Role")
+    first_name = forms.CharField(max_length=30, required=True, label="First Name")
+    last_name = forms.CharField(max_length=30, required=True, label="Last Name")
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'password1', 'password2', 'role')  # Removed 'courses'
+        fields = ('username', 'email', 'password1', 'password2', 'role', 'first_name', 'last_name')
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -51,6 +53,7 @@ class TrainingModuleForm(forms.ModelForm):
     class Meta:
         model = TrainingModule
         fields = ['title', 'description', 'content']
+
 
 class CourseForm(forms.ModelForm):
     pre_quiz = forms.ModelChoiceField(

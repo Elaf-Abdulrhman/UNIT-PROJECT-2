@@ -5,6 +5,7 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 from django.contrib import messages
+from django.db.models import Q
 from .forms import QuestionFormSet
 from .forms import (
     CourseForm,
@@ -80,28 +81,27 @@ def complete_quiz(request, quiz_id):
 def about(request):
     return render(request, 'training/about.html')
 
-
-# Course Management
 def course_list(request):
-    search_query = request.GET.get('search', '')  # Get the search query
-    sort_by = request.GET.get('sort', '')  # Get the sorting option, default to no sorting
+    search_query = request.GET.get('search', '')
+    sort_by = request.GET.get('sort', '')
 
-    # Filter courses based on the search query
     if search_query:
-        courses = Course.objects.filter(title__icontains=search_query)
+        courses = Course.objects.filter(
+            Q(title__icontains=search_query) |
+            Q(trainer__first_name__icontains=search_query) |
+            Q(trainer__last_name__icontains=search_query)
+        )
     else:
         courses = Course.objects.all()
 
-    # Apply sorting if a valid option is selected
     if sort_by == 'start_date':
-        courses = courses.order_by('start_date')  # Earliest starting date first
+        courses = courses.order_by('start_date')
 
     return render(request, 'courses/course_list.html', {
         'courses': courses,
         'search_query': search_query,
         'sort_by': sort_by,
     })
-
 
 @login_required
 def course_edit(request, pk):
