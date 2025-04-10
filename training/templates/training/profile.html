@@ -7,58 +7,67 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h2>Welcome, {{ user.username }}</h2>
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Welcome, {{ user.username }}</h2>
+        <hr class="w-25 mx-auto">
+    </div>
 
     {% if user.role == 'employee' %}
-        <h3>Your Enrolled Courses</h3>
+        <h3 class="mb-4">Your Enrolled Courses</h3>
         {% if enrollments %}
-            <div class="row">
+            <div class="row g-4">
                 {% for enrollment in enrollments %}
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100 shadow-sm">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 shadow-sm border-0">
                         {% if enrollment.course.image %}
-                        <img src="{{ enrollment.course.image.url }}" class="card-img-top course-image" alt="{{ enrollment.course.title }}">
+                        <img src="{{ enrollment.course.image.url }}" class="card-img-top" alt="{{ enrollment.course.title }}">
                         {% else %}
-                        <img src="{% static 'images/default.png' %}" class="card-img-top course-image" alt="Default Image">
+                        <img src="{% static 'images/default.png' %}" class="card-img-top" alt="Default Image">
                         {% endif %}
                         <div class="card-body">
                             <h5 class="card-title">{{ enrollment.course.title }}</h5>
-                            <p class="card-text">{{ enrollment.course.description|truncatewords:20 }}</p>
+                            <p class="card-text text-muted small">{{ enrollment.course.description|truncatewords:20 }}</p>
+                        </div>
+                        <div class="card-footer bg-white border-0 text-end">
+                            <a href="{% url 'course_detail' enrollment.course.id %}" class="btn btn-outline-primary btn-sm">View Course</a>
                         </div>
                     </div>
                 </div>
                 {% endfor %}
             </div>
         {% else %}
-            <p>You are not enrolled in any courses yet.</p>
+            <div class="alert alert-info">You are not enrolled in any courses yet.</div>
         {% endif %}
 
     {% elif user.role == 'trainer' %}
-        <h3>Courses You Created</h3>
+        <h3 class="mb-4">Courses You Created</h3>
         {% if created_courses %}
-            <div class="row">
+            <div class="row g-4">
                 {% for course in created_courses %}
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100 shadow-sm">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 shadow-sm border-0">
                         {% if course.image %}
-                        <img src="{{ course.image.url }}" class="card-img-top course-image" alt="{{ course.title }}">
+                        <img src="{{ course.image.url }}" class="card-img-top" alt="{{ course.title }}">
                         {% else %}
-                        <img src="{% static 'images/default.png' %}" class="card-img-top course-image" alt="Default Image">
+                        <img src="{% static 'images/default.png' %}" class="card-img-top" alt="Default Image">
                         {% endif %}
                         <div class="card-body">
                             <h5 class="card-title">{{ course.title }}</h5>
-                            <p class="card-text">{{ course.description|truncatewords:20 }}</p>
+                            <p class="card-text text-muted small">{{ course.description|truncatewords:20 }}</p>
+                        </div>
+                        <div class="card-footer bg-white border-0 text-end">
+                            <a href="{% url 'course_detail' course.id %}" class="btn btn-outline-secondary btn-sm">Manage Course</a>
                         </div>
                     </div>
                 </div>
                 {% endfor %}
             </div>
         {% else %}
-            <p>You have not created any courses yet.</p>
+            <div class="alert alert-warning">You have not created any courses yet.</div>
         {% endif %}
 
     {% else %}
-        <p>Your role is not recognized.</p>
+        <div class="alert alert-danger">Your role is not recognized.</div>
     {% endif %}
 </div>
 {% endblock %}

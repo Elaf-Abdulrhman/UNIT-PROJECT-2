@@ -4,79 +4,94 @@
 {% block title %}Courses{% endblock %}
 
 {% block content %}
-    <div class="properties-container">
-        <h2>Our Courses</h2>
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Our Courses</h2>
 
-        <!-- Search Bar -->
-        <div class="search-bar mb-3">
-            <form method="get" action="{% url 'course_list' %}">
-                <input type="text" name="search" placeholder="Search by training name..." value="{{ search_query }}">
-                <select name="sort" class="form-select d-inline-block w-auto">
-                    <option value="" {% if sort_by == '' %}selected{% endif %}>No Sorting</option>
-                    <option value="start_date" {% if sort_by == 'start_date' %}selected{% endif %}>Earliest Start Date</option>
-                </select>
-                <button type="submit" class="btn btn-primary">Search & Filter</button>
-            </form>
+    <!-- Search and Filter -->
+    <form method="get" action="{% url 'course_list' %}" class="row g-2 mb-4 align-items-end">
+        <div class="col-md-6">
+            <input type="text" name="search" class="form-control" placeholder="Search by training name..." value="{{ search_query }}">
         </div>
+        <div class="col-md-4">
+            <select name="sort" class="form-select">
+                <option value="" {% if sort_by == '' %}selected{% endif %}>No Sorting</option>
+                <option value="start_date" {% if sort_by == 'start_date' %}selected{% endif %}>Earliest Start Date</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Search</button>
+        </div>
+    </form>
 
-        <!-- New Course Button for Trainers -->
-        {% if user.is_authenticated and user.role == 'trainer' %}
-            <div class="text-end mb-3">
-                <a href="{% url 'course_add' %}" class="btn btn-success">+ Add New Course</a>
+    <!-- Add New Course Button -->
+    {% if user.is_authenticated and user.role == 'trainer' %}
+        <div class="text-end mb-4">
+            <a href="{% url 'course_add' %}" class="btn btn-success">+ Add New Course</a>
+        </div>
+    {% endif %}
+
+    <!-- Create Quiz Links -->
+    {% if user.is_authenticated and user.role == 'trainer' %}
+        {% if course %}
+            <div class="mb-4">
+                <a href="{% url 'create_quiz' course.id 'pre' %}" class="btn btn-outline-primary me-2">Create Pre-Quiz</a>
+                <a href="{% url 'create_quiz' course.id 'post' %}" class="btn btn-outline-secondary">Create Post-Quiz</a>
             </div>
+        {% else %}
+            <p class="text-muted">No course selected for quiz creation.</p>
         {% endif %}
+    {% endif %}
 
-        {% if user.is_authenticated and user.role == 'trainer' %}
-            {% if course %}
-                <a href="{% url 'create_quiz' course.id 'pre' %}" class="btn btn-primary">Create Pre-Quiz</a>
-                <a href="{% url 'create_quiz' course.id 'post' %}" class="btn btn-secondary">Create Post-Quiz</a>
-            {% else %}
-                <p>No course selected for quiz creation.</p>
-            {% endif %}
-        {% endif %}
-        <!-- Course List -->
-        <div class="properties-list">
-            {% if courses %}
-                {% for course in courses %}
-                    <div class="property-item">
+    <!-- Course Cards -->
+    <div class="row">
+        {% if courses %}
+            {% for course in courses %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
                         {% if course.image %}
-                            <img src="{{ course.image.url }}" alt="{{ course.title }}" class="course-image">
+                            <img src="{{ course.image.url }}" class="card-img-top" alt="{{ course.title }}">
                         {% else %}
-                            <img src="{% static 'images/default.png' %}" alt="Default Image" class="course-image">
+                            <img src="{% static 'images/default.png' %}" class="card-img-top" alt="Default Image">
                         {% endif %}
-                        <h3>{{ course.title }}</h3>
-                        <h2>Trainer: {{ course.trainer.username }}</h2>
-                        <p>Start Date: {{ course.start_date|date:"F j, Y" }}</p>
-                        <form action="{% url 'course_detail' course.id %}" method="get">
-                            <button type="submit">View Details</button>
-                        </form>
-                        {% if user.is_authenticated and user.role == 'employee' %}
-                            <form action="#" method="get">
-                                <button type="submit">Enroll</button>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ course.title }}</h5>
+                            <p class="card-text"><strong>Trainer:</strong> {{ course.trainer.username }}</p>
+                            <p class="card-text"><strong>Start Date:</strong> {{ course.start_date|date:"F j, Y" }}</p>
+
+                            <form action="{% url 'course_detail' course.id %}" method="get" class="d-grid gap-2 mb-2">
+                                <button type="submit" class="btn btn-outline-primary">View Details</button>
                             </form>
-                        {% endif %}
-                        {% if user.is_authenticated and user.role == 'trainer' %}
-                            {% if course.trainer == user %}
-                                <form action="{% url 'course_edit' course.id %}" method="get">
-                                    <button type="submit">Edit</button>
+
+                            {% if user.is_authenticated and user.role == 'employee' %}
+                                <form action="#" method="get" class="d-grid gap-2 mb-2">
+                                    <button type="submit" class="btn btn-outline-success">Enroll</button>
                                 </form>
-                                <form action="{% url 'course_delete' course.id %}" method="post" onsubmit="return confirmDelete();">
+                            {% endif %}
+
+                            {% if user.is_authenticated and user.role == 'trainer' and course.trainer == user %}
+                                <form action="{% url 'course_edit' course.id %}" method="get" class="d-grid gap-2 mb-2">
+                                    <button type="submit" class="btn btn-warning">Edit</button>
+                                </form>
+                                <form action="{% url 'course_delete' course.id %}" method="post" onsubmit="return confirmDelete();" class="d-grid gap-2">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-danger">Delete</button>
                                 </form>
                             {% endif %}
-                        {% endif %}
+                        </div>
                     </div>
-                {% endfor %}
-            {% else %}
-                <p>No courses found matching your search criteria.</p>
-            {% endif %}
-        </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <p class="text-center text-muted">No courses found matching your search criteria.</p>
+            </div>
+        {% endif %}
     </div>
+</div>
 
-    <script>
-        function confirmDelete() {
-            return confirm("Are you sure you want to delete this course? This action cannot be undone.");
-        }
-    </script>
+<script>
+    function confirmDelete() {
+        return confirm("Are you sure you want to delete this course? This action cannot be undone.");
+    }
+</script>
 {% endblock %}
