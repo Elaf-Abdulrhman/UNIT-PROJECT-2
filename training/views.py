@@ -83,13 +83,24 @@ def about(request):
 
 # Course Management
 def course_list(request):
-    search_query = request.GET.get('search', '')  # Get the search query from the request
+    search_query = request.GET.get('search', '')  # Get the search query
+    sort_by = request.GET.get('sort', '')  # Get the sorting option, default to no sorting
+
+    # Filter courses based on the search query
     if search_query:
-        # Use icontains for case-insensitive partial matching
         courses = Course.objects.filter(title__icontains=search_query)
     else:
-        courses = Course.objects.all()  # Show all courses if no search query
-    return render(request, 'courses/course_list.html', {'courses': courses, 'search_query': search_query})
+        courses = Course.objects.all()
+
+    # Apply sorting if a valid option is selected
+    if sort_by == 'start_date':
+        courses = courses.order_by('start_date')  # Earliest starting date first
+
+    return render(request, 'courses/course_list.html', {
+        'courses': courses,
+        'search_query': search_query,
+        'sort_by': sort_by,
+    })
 
 
 @login_required

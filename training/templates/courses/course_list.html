@@ -6,10 +6,16 @@
 {% block content %}
     <div class="properties-container">
         <h2>Our Courses</h2>
-        <div class="search-bar">
+
+        <!-- Search Bar -->
+        <div class="search-bar mb-3">
             <form method="get" action="{% url 'course_list' %}">
                 <input type="text" name="search" placeholder="Search for courses..." value="{{ search_query }}">
-                <button type="submit">Search</button>
+                <select name="sort" class="form-select d-inline-block w-auto">
+                    <option value="" {% if sort_by == '' %}selected{% endif %}>No Sorting</option>
+                    <option value="start_date" {% if sort_by == 'start_date' %}selected{% endif %}>Earliest Start Date</option>
+                </select>
+                <button type="submit" class="btn btn-primary">Search & Sort</button>
             </form>
         </div>
 
@@ -20,6 +26,7 @@
             </div>
         {% endif %}
 
+        <!-- Course List -->
         <div class="properties-list">
             {% if courses %}
                 {% for course in courses %}
@@ -30,6 +37,7 @@
                             <img src="{% static 'images/default.png' %}" alt="Default Image" class="course-image">
                         {% endif %}
                         <h3>{{ course.title }}</h3>
+                        <p>Start Date: {{ course.start_date|date:"F j, Y" }}</p>
                         <form action="{% url 'course_detail' course.id %}" method="get">
                             <button type="submit">View Details</button>
                         </form>
