@@ -35,17 +35,16 @@ def signup_view(request):
 # User Profile
 @login_required
 def profile(request):
-    if request.user.role == 'employee':
-        # Fetch courses the employee is enrolled in
-        enrolled_courses = request.user.enrolled_courses.all()  # Assuming a ManyToManyField for enrolled courses
-        return render(request, 'training/profile.html', {'courses': enrolled_courses, 'role': 'employee'})
-    elif request.user.role == 'trainer':
-        # Fetch courses created by the trainer
-        created_courses = Course.objects.filter(trainer=request.user)
-        return render(request, 'training/profile.html', {'courses': created_courses, 'role': 'trainer'})
-    else:
-        # Handle other roles or unauthorized access
-        return render(request, 'training/profile.html', {'courses': [], 'role': 'unknown'})
+    if request.user.is_authenticated:
+        if request.user.role == 'employee':
+            # Fetch enrolled courses for employees
+            enrollments = Enrollment.objects.filter(user=request.user)
+            return render(request, 'training/profile.html', {'enrollments': enrollments})
+        elif request.user.role == 'trainer':
+            # Fetch created courses for trainers
+            created_courses = Course.objects.filter(trainer=request.user)
+            return render(request, 'training/profile.html', {'created_courses': created_courses})
+    return redirect('login')
 
 
 # Homepage
@@ -204,14 +203,16 @@ class CustomLoginView(LoginView):
 @login_required
 def start_course(request, course_id):
     course = get_object_or_404(Course, id=course_id)
-    course = Course.objects.create(
-        title="Sample Course",
-        description="This is a sample course",
-        trainer=request.user,
-        image=None,
-        # Remove 'start_date' and 'end_date' if they are being passed here
-    )
-    return render(request, 'courses/start_course.html', {'course': course})
+    if request.user.is_authenticated and request.user.role == 'employee':
+        # Check if the user is already enrolled
+        enrollment, created = Enrollment.objects.get_or_create(user=request.user, course=course)
+        if created:
+            # Enrollment was successfully created
+            return redirect('profile')
+        else:
+            # User is already enrolled
+            return redirect('profile')
+    return redirect('course_list')
 
 
 def show_quiz(request, course_id, quiz_type):

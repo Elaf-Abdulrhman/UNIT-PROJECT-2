@@ -8,21 +8,22 @@
 {% block content %}
 <div class="container mt-5">
     <h2>Welcome, {{ user.username }}</h2>
-    {% if role == 'employee' %}
+
+    {% if user.role == 'employee' %}
         <h3>Your Enrolled Courses</h3>
-        {% if courses %}
+        {% if enrollments %}
             <div class="row">
-                {% for course in courses %}
+                {% for enrollment in enrollments %}
                 <div class="col-md-4 mb-4">
                     <div class="card h-100 shadow-sm">
-                        {% if course.image %}
-                        <img src="{{ course.image.url }}" class="card-img-top course-image" alt="{{ course.title }}">
+                        {% if enrollment.course.image %}
+                        <img src="{{ enrollment.course.image.url }}" class="card-img-top course-image" alt="{{ enrollment.course.title }}">
                         {% else %}
                         <img src="{% static 'images/default.png' %}" class="card-img-top course-image" alt="Default Image">
                         {% endif %}
                         <div class="card-body">
-                            <h5 class="card-title">{{ course.title }}</h5>
-                            <p class="card-text">{{ course.description|truncatewords:20 }}</p>
+                            <h5 class="card-title">{{ enrollment.course.title }}</h5>
+                            <p class="card-text">{{ enrollment.course.description|truncatewords:20 }}</p>
                         </div>
                     </div>
                 </div>
@@ -31,11 +32,12 @@
         {% else %}
             <p>You are not enrolled in any courses yet.</p>
         {% endif %}
-    {% elif role == 'trainer' %}
+
+    {% elif user.role == 'trainer' %}
         <h3>Courses You Created</h3>
-        {% if courses %}
+        {% if created_courses %}
             <div class="row">
-                {% for course in courses %}
+                {% for course in created_courses %}
                 <div class="col-md-4 mb-4">
                     <div class="card h-100 shadow-sm">
                         {% if course.image %}
@@ -54,6 +56,7 @@
         {% else %}
             <p>You have not created any courses yet.</p>
         {% endif %}
+
     {% else %}
         <p>Your role is not recognized.</p>
     {% endif %}

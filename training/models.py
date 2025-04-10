@@ -122,8 +122,8 @@ class Progress(models.Model):
 
 
 class Enrollment(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # Use AUTH_USER_MODEL
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    course = models.ForeignKey('Course', on_delete=models.CASCADE)
     enrolled_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
