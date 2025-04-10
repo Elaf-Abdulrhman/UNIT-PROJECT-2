@@ -3,179 +3,6 @@
     margin-top: 10px;
     font-weight: bold;
 }
-/* Container for logo, nav, and sign-up button */
-.header-container {
-    display: flex;
-    justify-content: space-between; /* Space between the logo, nav, and buttons */
-    align-items: center;            /* Vertically align the elements */
-    padding: 10px 20px;             /* Add some padding to the header */
-}
-
-/* Navigation bar styling */
-nav {
-    font-weight: normal;
-    background-color: white;  /* Background for nav bar */
-    padding: 10px 50px;          /* Padding around the nav bar */
-    border-radius: 30px;      /* Circular edges for the navbar */
-    margin: 0;                /* Remove horizontal margin */
-    display: flex;            /* Use flexbox to align items in a row */
-    justify-content: center;  /* Center the items horizontally */
-    align-items: center;      /* Align items vertically in the middle */
-    box-shadow: none;         /* Remove the box-shadow */
-    transition: transform 0.3s ease; /* Smooth transition for scaling */
-}
-
-/* Hover effect for nav bar 
-nav:hover {
-    transform: scale(1.05); /* Scale up the entire navbar slightly 
-}*/
-
-/* Style for the unordered list */
-.navbar-nav {
-    display: flex;           /* Align items in a row */
-    list-style-type: none;   /* Remove bullet points from the list */
-    margin: 0;
-    padding: 0;
-    width: fit-content;
-}
-
-/* Style for the individual list items (nav items) */
-.nav-item {
-    margin: 0 10px;  /* Reduce space between items */
-    transition: color 0.3s ease, transform 0.3s ease; /* Smooth transitions for color and transform */
-}
-
-.nav-item:hover {
-    transform: scale(1.1); /* Slightly increase the size of the nav items on hover */
-}
-
-/* Style for the links */
-.nav-link {
-    text-decoration: none;  /* Remove underline from links */
-    color: black;           /* Text color */
-    font-weight: lighter;   /* Lighter font weight for nav items */
-    padding: 10px 10px;     /* Reduce padding around the links */
-    transition: color 0.3s ease, transform 0.3s ease; /* Smooth transitions for color and transform */
-}
-
-
-/* Hover effect for nav links */
-.nav-link:hover {
-    color: red;  /* Change text color to red on hover */
-    transform: scale(1.1); /* Slightly increase the size of the nav items on hover */
-}
-
-.logo {
-    width: 50px;  /* Set the width of the logo */
-    height: 50px; /* Set the height of the logo */
-    margin-left: 80px; /* Add some space to the right of the logo */
-    margin-top: 100px;   /* Adjust the space at the top */
-    transition: color 0.3s ease;
-    font-size: 2rem;
-    font-weight: bold;
-}
-
-.logo:hover {
-    color: red;
-    transform: scale(1.1);
-}
-
-.moving-text {
-    text-transform: uppercase;
-    font-size: 2rem; /* Increase the font size */
-    margin-left: 30px;
-}
-
-/* Style for the paragraph element */
-.home p {
-    text-align: left; /* Align the text to the left */
-    color: #000000;   /* Set the text color */
-    font-size: 1.2rem; /* Set the font size */
-    margin-top: 10px; /* Adjust the top margin */
-    margin-left: 7%;
-}
-
-/* Style for the button element */
-.home .explore {
-    background-color: #000000; /* Set the background color */
-    color: white;           /* Set the text color */
-    border: none;           /* Remove the border */
-    padding: 10px 20px;     /* Padding around the button */
-    margin-top: 20px;       /* Adjust the top margin */
-    cursor: pointer;        /* Change cursor to pointer on hover */
-    transition: background-color 0.3s ease; /* Smooth transition for background color */
-    border-radius: 20px;
-    width: fit-content;
-    margin-left: 7%;
-    margin-top: 20%;
-}
-
-.home h1{
-    font-size: 5.5rem;
-}
-
-/* Style for the buttons container */
-.buttons {
-    display: flex;
-    align-items: center;
-    margin-right: 60px;
-}
-
-/* Style for the sign-up button */
-.signup, .signin {
-    display: flex;
-    align-items: center;
-    background-color: transparent; /* Transparent background */
-    color: black;
-    border: none;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: color 0.3s ease;
-    margin-left: 10px; /* Add some space between buttons */
-}
-
-/* Material icon in sign-up button */
-.signup .material-icons {
-    margin-right: 8px; /* Space between icon and text */
-}
-
-/* Hover effect for the sign-up button */
-.signup:hover , .signin:hover{
-    color: red; /* Change text color on hover */
-    transform: scale(1.1);
-}
-
-/* Style for the mode-toggle button */
-.mode-toggle {
-    display: flex;
-    align-items: center;
-    background-color: transparent; /* Transparent background */
-    color: black;
-    border: none;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: color 0.3s ease;
-    margin-left: 10px; /* Add some space between buttons */
-}
-
-/* Material icon in mode-toggle button */
-.mode-toggle .material-icons {
-    margin-right: 8px; /* Space between icon and text */
-}
-
-/* Hover effect for the mode-toggle button */
-.mode-toggle:hover {
-    color: red; /* Change text color on hover */
-    transform: scale(1.1);
-}
-
-body .contact{
-    background-color: #333;
-}
-.c-title{
-    margin-left: 95px; /* Add some space to the right of the logo */
-}
-
 /* Style for the properties list */
 .properties-container {
     margin-left:75px;
@@ -347,6 +174,24 @@ body .contact{
     font-size: 1rem;
     color: #555;
     line-height: 1.5;
+}
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #141c28;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.3s ease;
+}
+
+#preloader.hidden {
+    opacity: 0;
+    visibility: hidden;
 }
 
 /* Responsive adjustments for smaller screens */

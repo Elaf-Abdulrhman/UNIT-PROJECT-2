@@ -6,51 +6,55 @@
 {% block content %}
 
 <!-- Hero Section -->
-<section class="services-hero text-white d-flex align-items-center justify-content-center text-center"
-tyle="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('static/images/hero-bg.png'); height: 100vh; background-size: cover; background-repeat: no-repeat;">
-    <div>
-        <h1 class="fw-bold display-4">Empowering Your Workforce</h1>
-        <p class="lead">Explore our tailored services designed for the oil & gas industry.</p>
-    </div>
+<section class="py-4 text-center"> <!-- Reduced padding from py-5 to py-4 -->
+  <div class="container">
+    <h1 class="fw-bold display-5 mb-3">Empowering Excellence</h1>
+    <p class="lead text-muted mb-0">Delivering innovative training and consultancy services tailored to the oil & gas industry.</p>
+  </div>
 </section>
 
-<!-- Services Section -->
-<section class="py-5 bg-light">
-    <div class="container">
-        <h2 class="text-center mb-5 fw-bold">Our Core Services</h2>
-        <div class="row g-4">
-            <!-- Service 1 -->
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm border-0">
-                    <img src="{% static 'images/service1.jpg' %}" class="card-img-top" alt="Training Programs">
-                    <div class="card-body text-center">
-                        <h4 class="card-title fw-semibold">Training Programs</h4>
-                        <p class="card-text">Hands-on learning experiences tailored for the energy sector.</p>
-                    </div>
-                </div>
-            </div>
-            <!-- Service 2 -->
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm border-0">
-                    <img src="{% static 'images/service2.jpg' %}" class="card-img-top" alt="Consulting Services">
-                    <div class="card-body text-center">
-                        <h4 class="card-title fw-semibold">Consulting Services</h4>
-                        <p class="card-text">Strategic insights and expert advice to streamline your operations.</p>
-                    </div>
-                </div>
-            </div>
-            <!-- Service 3 -->
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm border-0">
-                    <img src="{% static 'images/service3.jpg' %}" class="card-img-top" alt="Custom Solutions">
-                    <div class="card-body text-center">
-                        <h4 class="card-title fw-semibold">Custom Solutions</h4>
-                        <p class="card-text">Bespoke solutions built to overcome your specific business challenges.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- Services Grid -->
+<section class="py-4"> <!-- Reduced padding from py-5 to py-4 -->
+  <div class="container">
+    <div class="mb-4"> <!-- Reduced margin from mb-5 to mb-4 -->
+      <h2 class="fw-bold">Our Services</h2>
     </div>
+    
+    <div class="row g-4">
+      <!-- Service Card 1 -->
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm p-4 transition hover-shadow">
+          <div class="text-center text-primary mb-4">
+            <i class="fas fa-chalkboard-teacher fa-3x"></i>
+          </div>
+          <h5 class="fw-semibold text-center mb-2">Professional Training</h5>
+          <p class="text-muted text-center">Customized training programs designed to upskill professionals in the energy and industrial sectors.</p>
+        </div>
+      </div>
+
+      <!-- Service Card 2 -->
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm p-4 transition hover-shadow">
+          <div class="text-center text-success mb-4">
+            <i class="fas fa-cogs fa-3x"></i>
+          </div>
+          <h5 class="fw-semibold text-center mb-2">Technical Consulting</h5>
+          <p class="text-muted text-center">Expert insights and practical strategies to optimize operational workflows and ensure compliance.</p>
+        </div>
+      </div>
+
+      <!-- Service Card 3 -->
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm p-4 transition hover-shadow">
+          <div class="text-center text-warning mb-4">
+            <i class="fas fa-tools fa-3x"></i>
+          </div>
+          <h5 class="fw-semibold text-center mb-2">Custom Solutions</h5>
+          <p class="text-muted text-center">Tailor-made services crafted for unique business needs, including digital transformation and automation.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 {% endblock %}
