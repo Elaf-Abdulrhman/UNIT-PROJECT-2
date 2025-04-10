@@ -89,7 +89,7 @@
     </main>
     <!-- Preloader -->
     <div id="preloader">
-        <img src="{% static 'images/favicon.png' %}" alt="Loading...">
+        <img src="{% static 'images/preloader.png' %}" alt="Loading...">
     </div>
     <script>
     // Wait until page is fully loaded
@@ -97,7 +97,7 @@
         setTimeout(() => {
             const preloader = document.getElementById("preloader");
             preloader.classList.add("hidden");
-        }, 1000); // 2000 milliseconds = 2 seconds
+        },); //1000); // 1000 milliseconds = 1 second
     });
 </script>
 
