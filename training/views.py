@@ -1,10 +1,20 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordResetForm, SetPasswordForm
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 from django.contrib import messages
+from django.contrib.auth.models import User
+from django.contrib.auth.views import PasswordChangeView
+from django.urls import reverse
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.views import View
+from django.template.loader import render_to_string
+from django.contrib.sites.shortcuts import get_current_site
+from django.http import HttpResponse
+from django.db.models import Q
 from .forms import (
     CourseForm,
     CustomUserCreationForm,
@@ -58,20 +68,20 @@ def about(request):
     return render(request, 'training/about.html')
 
 def course_list(request):
-    search_query = request.GET.get('search', '')
-    sort_by = request.GET.get('sort', '')
+    search_query = request.GET.get('search', '')  # Get the search query
+    sort_by = request.GET.get('sort', '')  # Get the sorting option, default to no sorting
 
+    # Filter courses based on the search query (title or trainer name)
     if search_query:
         courses = Course.objects.filter(
-            Q(title__icontains=search_query) |
-            Q(trainer__first_name__icontains=search_query) |
-            Q(trainer__last_name__icontains=search_query)
-        )
+            Q(title__icontains=search_query) | Q(trainer__username__icontains=search_query)
+        )  # Search in course title or trainer username
     else:
         courses = Course.objects.all()
 
+    # Apply sorting if a valid option is selected
     if sort_by == 'start_date':
-        courses = courses.order_by('start_date')
+        courses = courses.order_by('start_date')  # Earliest starting date first
 
     return render(request, 'courses/course_list.html', {
         'courses': courses,
@@ -146,3 +156,43 @@ def services(request):
 class CustomLoginView(LoginView):
     template_name = 'signup_signin/login.html'  # Path to your login.html
 
+class PasswordResetView(View):
+    def get(self, request):
+        return render(request, 'signup_signin/reset/reset_password_form.html')
+
+    def post(self, request):
+        username = request.POST.get('username')
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return HttpResponse('User does not exist', status=400)
+
+        token = default_token_generator.make_token(user)
+        uidb64 = urlsafe_base64_encode(user.pk.encode('utf-8'))
+        reset_url = reverse('password_reset_confirm', args=[uidb64, token])
+
+        # Render a custom password reset page without email
+        reset_page = render_to_string('signup_signin/reset/password_reset_confirmation.html', {'reset_url': reset_url})
+        return HttpResponse(reset_page)
+
+class PasswordResetConfirmView(View):
+    def get(self, request, uidb64, token):
+        try:
+            uid = urlsafe_base64_decode(uidb64).decode('utf-8')
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, User.DoesNotExist):
+            return HttpResponse('Invalid token', status=400)
+
+        return render(request, 'signup_signin/reset/password_reset_confirm.html', {'uidb64': uidb64, 'token': token})
+
+    def post(self, request, uidb64, token):
+        uid = urlsafe_base64_decode(uidb64).decode('utf-8')
+        user = User.objects.get(pk=uid)
+
+        # Handle password reset confirmation
+        form = SetPasswordForm(user, request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('password_reset_complete')
+        else:
+            return render(request, 'signup_signin/reset/password_reset_confirm.html', {'form': form})

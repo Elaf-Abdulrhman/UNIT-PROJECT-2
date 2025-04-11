@@ -10,7 +10,7 @@
     <!-- Search and Filter -->
     <form method="get" action="{% url 'course_list' %}" class="row g-2 mb-4 align-items-end">
         <div class="col-md-6">
-            <input type="text" name="search" class="form-control" placeholder="Search by training name..." value="{{ search_query }}">
+            <input type="text" name="search" class="form-control" placeholder="Search by course title or trainer name..." value="{{ search_query }}">
         </div>
         <div class="col-md-4">
             <select name="sort" class="form-select">
