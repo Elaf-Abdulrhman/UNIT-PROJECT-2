@@ -40,3 +40,12 @@ class Enrollment(models.Model):
 
     def __str__(self):
         return f'{self.user.username} enrolled in {self.course.title}'
+
+class Video(models.Model):
+    course = models.ForeignKey(Course, related_name='videos', on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    video_file = models.FileField(upload_to='videos/', null=True, blank=True)  # Upload video file
+    video_url = models.URLField()  # If you want to embed a YouTube video
+    
+    def __str__(self):
+        return self.title

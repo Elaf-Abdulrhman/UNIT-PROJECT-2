@@ -143,13 +143,14 @@ def enroll_course(request, course_id):
     else:
         return HttpResponseForbidden("You are not allowed to enroll in this course.")
 
-
-# Course Detail
 def course_detail(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
-    return render(request, 'courses/course_detail.html', {'course': course})
-
-
+    videos = course.videos.all()
+    return render(request, 'courses/course_detail.html', {
+        'course': course,
+        'videos': videos
+    })
+    
 def services(request):
     return render(request, 'training/services.html')
 

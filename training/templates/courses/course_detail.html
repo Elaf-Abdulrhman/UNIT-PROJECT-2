@@ -3,72 +3,58 @@
 {% block title %}Course Details{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="card shadow-sm p-4">
-        <h1 class="text-center mb-3">{{ course.title }}</h1>
+{% load youtube_tags %}
+{% load static %}
 
-        {% if course.image %}
-            <div class="text-center mb-4">
-                <img src="{{ course.image.url }}" alt="{{ course.title }}" class="img-fluid rounded" style="max-height: 300px; object-fit: cover;">
-            </div>
-        {% endif %}
+<div class="container-fluid mt-5">
+  <div class="row">
 
-        <p class="lead">{{ course.description }}</p>
-
-        <ul class="list-group list-group-flush mb-4">
-            <li class="list-group-item"><strong>Start Date:</strong> {{ course.start_date }}</li>
-            <li class="list-group-item"><strong>End Date:</strong> {{ course.end_date }}</li>
-            <li class="list-group-item"><strong>Trainer:</strong> {{ course.trainer.username }}</li>
-        </ul>
-
-        <!-- Section for Employees -->
-        {% if user.is_authenticated and user.role == 'employee' %}
-            <div class="d-flex flex-wrap gap-3">
-                <form action="{% url 'start_course' course.id %}" method="get">
-                    <button type="submit" class="btn btn-primary">Start Course</button>
-                </form>
-                {% if course.pre_quiz %}
-                    <a href="{% url 'solve_quiz' course.id 'pre' %}" class="btn btn-outline-info">Solve Pre-Quiz</a>
-                {% endif %}
-                {% if course.post_quiz %}
-                    <a href="{% url 'solve_quiz' course.id 'post' %}" class="btn btn-outline-info">Solve Post-Quiz</a>
-                {% endif %}
-            </div>
-        {% endif %}
-
-        <!-- Section for Trainers -->
-        {% if user.is_authenticated and user == course.trainer %}
-            <hr class="my-4">
-            <div class="d-flex flex-wrap gap-3">
-                <a href="{% url 'course_edit' course.id %}" class="btn btn-warning">Edit Course</a>
-                <form action="{% url 'course_delete' course.id %}" method="post" onsubmit="return confirm('Are you sure you want to delete this course?');">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Delete Course</button>
-                </form>
-            </div>
-
-            <!-- Add/Edit Pre-Quiz -->
-            <div class="mt-4">
-                <h5>Pre-Quiz</h5>
-                {% if course.pre_quiz %}
-                    <p>{{ course.pre_quiz.title }}</p>
-                    <a href="#" class="btn btn-outline-secondary">Edit Pre-Quiz</a>
-                {% else %}
-                    <a href="{% url 'take_quiz' course.id 'pre' %}" class="btn btn-primary">Add Pre-Quiz</a>
-                {% endif %}
-            </div>
-
-            <!-- Add/Edit Post-Quiz -->
-            <div class="mt-4">
-                <h5>Post-Quiz</h5>
-                {% if course.post_quiz %}
-                    <p>{{ course.post_quiz.title }}</p>
-                    <a href="#" class="btn btn-outline-secondary">Edit Post-Quiz</a>
-                {% else %}
-                    <a href="{% url 'take_quiz' course.id 'post' %}" class="btn btn-primary">Add Post-Quiz</a>
-                {% endif %}
-            </div>
-        {% endif %}
+    <!-- Sidebar -->
+    <div class="col-md-3">
+      <div class="list-group">
+        <h5 class="list-group-item list-group-item-action active">Course Videos</h5>
+        {% for video in videos %}
+          <a href="#" class="list-group-item list-group-item-action" onclick="showVideo({{ forloop.counter }})">
+            {{ video.title }}
+          </a>
+        {% endfor %}
+      </div>
     </div>
+
+    <!-- Main Content -->
+    <div class="col-md-9">
+      <h2>{{ course.title }}</h2>
+      <p>{{ course.description }}</p>
+
+      {% for video in videos %}
+        <div id="video{{ forloop.counter }}" class="video-section mb-5" style="{% if not forloop.first %}display:none;{% endif %}">
+          <h4>{{ video.title }}</h4>
+          <div class="ratio ratio-16x9">
+            <iframe 
+              src="{{ video.video_url|youtube_embed }}" 
+              title="{{ video.title }}" 
+              frameborder="0" 
+              allowfullscreen>
+            </iframe>
+          </div>
+        </div>
+      {% empty %}
+        <p>No videos available for this course.</p>
+      {% endfor %}
+    </div>
+
+  </div>
 </div>
+
+<script>
+  function showVideo(index) {
+    const sections = document.querySelectorAll('.video-section');
+    sections.forEach(section => section.style.display = 'none');
+    const selected = document.getElementById(`video${index}`);
+    if (selected) {
+      selected.style.display = 'block';
+      selected.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+</script>
 {% endblock %}
