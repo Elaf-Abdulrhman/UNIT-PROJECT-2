@@ -197,3 +197,19 @@ class PasswordResetConfirmView(View):
             return redirect('password_reset_complete')
         else:
             return render(request, 'signup_signin/reset/password_reset_confirm.html', {'form': form})
+
+def course_intro(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    is_enrolled = False
+
+    # Check if the user is enrolled
+    if request.user.is_authenticated and request.user.role == 'employee':
+        is_enrolled = Enrollment.objects.filter(user=request.user, course=course).exists()
+
+        # Handle enrollment if the user clicks "Enroll"
+        if request.method == 'POST' and 'enroll' in request.POST:
+            if not is_enrolled:  # Prevent duplicate enrollments
+                Enrollment.objects.create(user=request.user, course=course)
+                is_enrolled = True
+
+    return render(request, 'courses/course_intro.html', {'course': course, 'is_enrolled': is_enrolled})

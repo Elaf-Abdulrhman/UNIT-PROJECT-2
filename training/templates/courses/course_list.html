@@ -63,9 +63,7 @@
                             </form>
 
                             {% if user.is_authenticated and user.role == 'employee' %}
-                                <form action="#" method="get" class="d-grid gap-2 mb-2">
-                                    <button type="submit" class="btn btn-outline-success">Enroll</button>
-                                </form>
+                                <a href="{% url 'course_intro' course.id %}" class="btn btn-outline-success d-grid gap-2 mb-2">Enroll</a>
                             {% endif %}
 
                             {% if user.is_authenticated and user.role == 'trainer' and course.trainer == user %}

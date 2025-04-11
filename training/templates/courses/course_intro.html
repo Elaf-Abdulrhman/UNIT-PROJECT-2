@@ -1,0 +1,54 @@
+{% extends "training/base.html" %}
+{% load static %}
+
+{% block title %}Course Introduction{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <!-- Course Details -->
+        <div class="col-md-8">
+            <h1 class="fw-bold">{{ course.title }}</h1>
+            <p class="text-muted">{{ course.description }}</p>
+
+            <!-- Introductory Video -->
+            {% if course.intro_video_url %}
+                <div class="ratio ratio-16x9 mb-4">
+                    <iframe 
+                        src="{{ course.intro_video_url }}" 
+                        title="Introductory Video for {{ course.title }}" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            {% else %}
+                <p class="text-muted">No introductory video available for this course.</p>
+            {% endif %}
+
+            <!-- Enrollment Section -->
+            {% if is_enrolled %}
+                <div class="alert alert-success">
+                    You are enrolled in this course!
+                </div>
+                <a href="{% url 'course_detail' course.id %}" class="btn btn-primary">Start Course</a>
+            {% else %}
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="enroll" class="btn btn-success">Enroll in this Course</button>
+                </form>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Course Details</h5>
+                    <p><strong>Start Date:</strong> {{ course.start_date|date:"F j, Y" }}</p>
+                    <p><strong>End Date:</strong> {{ course.end_date|date:"F j, Y" }}</p>
+                    <p><strong>Trainer:</strong> {{ course.trainer.username }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -27,6 +27,7 @@ urlpatterns = [
     path('courses/enroll/<int:course_id>/', views.enroll_course, name='enroll_course'),
     path('courses/', views.course_list, name='course_list'),
     path('courses/<int:course_id>/', views.course_detail, name='course_detail'),
+    path('courses/<int:course_id>/intro/', views.course_intro, name='course_intro'),
 ]
 
 if settings.DEBUG:

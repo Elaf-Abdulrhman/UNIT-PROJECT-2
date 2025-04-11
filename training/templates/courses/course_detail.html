@@ -14,7 +14,7 @@
       <div class="list-group">
         <h5 class="list-group-item list-group-item-action active">Course Videos</h5>
         {% for video in videos %}
-          <a href="#" class="list-group-item list-group-item-action" onclick="showVideo({{ forloop.counter }})">
+          <a href="#" class="list-group-item list-group-item-action" onclick="showVideo('{{ forloop.counter }}')">
             {{ video.title }}
           </a>
         {% endfor %}
@@ -27,7 +27,7 @@
       <p>{{ course.description }}</p>
 
       {% for video in videos %}
-        <div id="video{{ forloop.counter }}" class="video-section mb-5" style="{% if not forloop.first %}display:none;{% endif %}">
+        <div id="video{{ forloop.counter }}" class="video-section mb-5 {% if not forloop.first %}d-none{% endif %}">
           <h4>{{ video.title }}</h4>
           <div class="ratio ratio-16x9">
             <iframe 
