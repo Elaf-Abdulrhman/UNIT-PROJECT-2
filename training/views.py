@@ -213,3 +213,9 @@ def course_intro(request, course_id):
                 is_enrolled = True
 
     return render(request, 'courses/course_intro.html', {'course': course, 'is_enrolled': is_enrolled})
+
+def blog_view(request):
+    return render(request, 'training/blog.html')
+
+def faq_view(request):
+    return render(request, 'training/faq.html')

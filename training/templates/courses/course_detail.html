@@ -14,7 +14,7 @@
       <div class="list-group">
         <h5 class="list-group-item list-group-item-action active">Course Videos</h5>
         {% for video in videos %}
-          <a href="#" class="list-group-item list-group-item-action" onclick="showVideo('{{ forloop.counter }}')">
+          <a href="#" class="list-group-item list-group-item-action" onclick="showVideo('{{ forloop.counter }}'); return false;">
             {{ video.title }}
           </a>
         {% endfor %}
@@ -23,8 +23,6 @@
 
     <!-- Main Content -->
     <div class="col-md-9">
-      <h2>{{ course.title }}</h2>
-      <p>{{ course.description }}</p>
 
       {% for video in videos %}
         <div id="video{{ forloop.counter }}" class="video-section mb-5 {% if not forloop.first %}d-none{% endif %}">
@@ -48,11 +46,14 @@
 
 <script>
   function showVideo(index) {
+    // Hide all video sections
     const sections = document.querySelectorAll('.video-section');
-    sections.forEach(section => section.style.display = 'none');
+    sections.forEach(section => section.classList.add('d-none'));
+
+    // Show the selected video section
     const selected = document.getElementById(`video${index}`);
     if (selected) {
-      selected.style.display = 'block';
+      selected.classList.remove('d-none');
       selected.scrollIntoView({ behavior: 'smooth' });
     }
   }

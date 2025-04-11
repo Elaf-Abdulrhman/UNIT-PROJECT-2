@@ -232,6 +232,41 @@
     }
 }
 
+/* Ensure the footer sticks to the bottom */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex-grow: 1;
+}
+
+/* Footer Styling */
+footer {
+    padding: 10px 0; /* Reduce vertical padding */
+    font-size: 0.9rem; /* Reduce font size */
+    background-color: #141c28; /* Optional: Adjust background color */
+}
+
+footer p {
+    margin: 5px 0; /* Reduce spacing between paragraphs */
+}
+
+footer a {
+    font-size: 0.9rem; /* Reduce font size for links */
+}
+
+footer a:hover {
+    text-decoration: underline; /* Optional: Add underline on hover */
+}
+
+footer .social-icons i {
+    font-size: 1.2rem; /* Adjust size of social media icons */
+    margin: 0 5px; /* Reduce spacing between icons */
+}
+
 /* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
     .properties-list {
