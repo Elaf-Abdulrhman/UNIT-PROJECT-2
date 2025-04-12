@@ -6,7 +6,10 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden, FileResponse
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.utils.decorators import method_decorator
+from django.views.decorators.http import require_POST
 from django.contrib.auth.views import PasswordChangeView
+from django.http import JsonResponse
 from django.urls import reverse
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -14,6 +17,7 @@ from django.views import View
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from .forms import (
     CourseForm,
@@ -26,6 +30,7 @@ from .models import (
     Enrollment,  
     Blog,
     Video,
+    VideoProgress,
 )
 from .utils import generate_certificate
 
@@ -157,20 +162,22 @@ def enroll_course(request, course_id):
         return HttpResponseForbidden("You are not allowed to enroll in this course.")
 
 
+@login_required
 def course_detail(request, course_id):
-    course = get_object_or_404(Course, pk=course_id)
+    course = get_object_or_404(Course, id=course_id)
+    videos = course.videos.all()
 
-    # Check if the user is authenticated
-    if not request.user.is_authenticated:
-        return render(request, 'courses/login_required.html', {'course': course})
+    # Get watched video IDs
+    watched_video_ids = VideoProgress.objects.filter(user=request.user, video__in=videos, watched=True).values_list('video_id', flat=True)
 
-    # If the user is logged in, show the course details
-    videos = course.videos.all()  # Assuming related_name='videos' in the Video model
     return render(request, 'courses/course_detail.html', {
         'course': course,
-        'videos': videos
+        'videos': videos,
+        'watched_video_ids': watched_video_ids,
+        'watched_videos': len(watched_video_ids),
+        'total_videos': videos.count()
     })
-    
+
 def services(request):
     return render(request, 'training/services.html')
 
@@ -299,12 +306,21 @@ def video_add(request, course_id):
 
 @login_required
 def complete_course(request, course_id):
-    # Get the course and ensure the user is enrolled
     course = get_object_or_404(Course, id=course_id)
     enrollment = Enrollment.objects.filter(user=request.user, course=course).first()
 
     if not enrollment:
         return redirect('course_detail', course_id=course.id)
+
+    # Check if all videos are watched
+    videos = course.videos.all()
+    watched_videos = VideoProgress.objects.filter(user=request.user, video__in=videos, watched=True).count()
+
+    if watched_videos < videos.count():
+        return render(request, 'courses/complete_course.html', {
+            'course': course,
+            'message': "You must watch all videos to download the certificate."
+        })
 
     # Generate the certificate
     certificate_path = generate_certificate(
@@ -315,3 +331,33 @@ def complete_course(request, course_id):
 
     # Serve the certificate as a downloadable file
     return FileResponse(open(certificate_path, 'rb'), as_attachment=True, filename=f'{course.title}_Certificate.png')
+
+@login_required
+def watch_video(request, video_id):
+    video = get_object_or_404(Video, id=video_id)
+    course = video.course
+
+    # Ensure the user is enrolled in the course
+    enrollment = Enrollment.objects.filter(user=request.user, course=course).first()
+    if not enrollment:
+        return redirect('course_detail', course_id=course.id)
+
+    # Mark the video as watched
+    progress, created = VideoProgress.objects.get_or_create(user=request.user, video=video)
+    progress.watched = True
+    progress.save()
+
+    return render(request, 'courses/watch_video.html', {'video': video, 'course': course})
+
+
+@csrf_exempt
+@require_POST
+@login_required
+def mark_video_watched(request, video_id):
+    try:
+        video = Video.objects.get(id=video_id)
+        # Create the watched record if it doesn't exist
+        watched, created = WatchedVideo.objects.get_or_create(user=request.user, video=video)
+        return JsonResponse({'status': 'success', 'watched': True})
+    except Video.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Video not found'}, status=404)

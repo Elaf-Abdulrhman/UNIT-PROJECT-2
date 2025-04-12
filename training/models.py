@@ -59,3 +59,11 @@ class Blog(models.Model):
 
     def __str__(self):
         return self.title
+
+class VideoProgress(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    video = models.ForeignKey('Video', on_delete=models.CASCADE)
+    watched = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.video.title} - Watched: {self.watched}"
