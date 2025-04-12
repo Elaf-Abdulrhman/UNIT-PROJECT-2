@@ -43,6 +43,10 @@
       {% empty %}
         <p>No videos available for this course.</p>
       {% endfor %}
+
+      {% if user.is_authenticated %}
+        <a href="{% url 'complete_course' course.id %}" class="btn btn-success mt-3">Download Certificate</a>
+      {% endif %}
     </div>
 
   </div>

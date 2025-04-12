@@ -3,7 +3,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, PasswordResetForm, SetPasswordForm
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, FileResponse
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.views import PasswordChangeView
@@ -27,6 +27,7 @@ from .models import (
     Blog,
     Video,
 )
+from .utils import generate_certificate
 
 def signup_view(request):
     if request.method == 'POST':
@@ -295,3 +296,22 @@ def video_add(request, course_id):
     else:
         form = VideoForm()
     return render(request, 'courses/video_form.html', {'form': form, 'course': course})
+
+@login_required
+def complete_course(request, course_id):
+    # Get the course and ensure the user is enrolled
+    course = get_object_or_404(Course, id=course_id)
+    enrollment = Enrollment.objects.filter(user=request.user, course=course).first()
+
+    if not enrollment:
+        return redirect('course_detail', course_id=course.id)
+
+    # Generate the certificate
+    certificate_path = generate_certificate(
+        employee_name=request.user.get_full_name(),
+        trainer_name=course.trainer.get_full_name(),
+        course_name=course.title
+    )
+
+    # Render the completion page
+    return render(request, 'courses/complete_course.html', {'course': course})
