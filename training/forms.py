@@ -2,7 +2,7 @@
 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import CustomUser, Course
+from .models import CustomUser, Course, Blog, Video
 from django.forms import modelformset_factory, inlineformset_factory
 
 
@@ -52,9 +52,26 @@ class CourseForm(forms.ModelForm):
         widget=forms.DateInput(attrs={'type': 'date'}),
         label="End Date"
     )
+    video_url = forms.URLField(
+        required=False,
+        label="Video URL",
+        help_text="Optional: Add a video URL for this course."
+    )
 
     class Meta:
         model = Course
-        fields = ['title', 'description', 'image', 'start_date', 'end_date']
+        fields = ['title', 'description', 'image', 'start_date', 'end_date', 'video_url']
+
+
+class BlogForm(forms.ModelForm):
+    class Meta:
+        model = Blog
+        fields = ['title', 'content']
+
+
+class VideoForm(forms.ModelForm):
+    class Meta:
+        model = Video
+        fields = ['title', 'video_url']
 
 

@@ -23,11 +23,12 @@ class Course(models.Model):
     trainer = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='created_courses'
+        related_name='courses'
     )
-    image = models.ImageField(upload_to='course_images/', blank=True, null=True)
-    start_date = models.DateField(blank=True, null=True)
-    end_date = models.DateField(blank=True, null=True)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    image = models.ImageField(upload_to='course_images/', null=True, blank=True)
+    video_url = models.URLField(null=True, blank=True)  # Optional video URL field
 
     def __str__(self):
         return self.title
@@ -42,10 +43,19 @@ class Enrollment(models.Model):
         return f'{self.user.username} enrolled in {self.course.title}'
 
 class Video(models.Model):
-    course = models.ForeignKey(Course, related_name='videos', on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='videos')
     title = models.CharField(max_length=200)
-    video_file = models.FileField(upload_to='videos/', null=True, blank=True)  # Upload video file
-    video_url = models.URLField()  # If you want to embed a YouTube video
-    
+    video_url = models.URLField()
+
+    def __str__(self):
+        return self.title
+
+class Blog(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blogs')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return self.title

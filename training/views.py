@@ -18,10 +18,14 @@ from django.db.models import Q
 from .forms import (
     CourseForm,
     CustomUserCreationForm,
+    BlogForm,
+    VideoForm,
 )
 from .models import (
     Course, 
     Enrollment,  
+    Blog,
+    Video,
 )
 
 def signup_view(request):
@@ -105,17 +109,25 @@ def course_edit(request, pk):
 
 @login_required
 def course_add(request):
+    if request.user.role != 'trainer':  # Ensure only trainers can add courses
+        return redirect('course_list')
+
     if request.method == 'POST':
         form = CourseForm(request.POST, request.FILES)
         if form.is_valid():
             course = form.save(commit=False)
-            course.trainer = request.user  # Automatically set the logged-in user as the trainer
+            course.trainer = request.user  # Assign the logged-in trainer as the course creator
             course.save()
-            return redirect('course_list')  # Redirect to the course list after saving
+
+            # Handle the optional video URL
+            video_url = form.cleaned_data.get('video_url')
+            if video_url:
+                Video.objects.create(course=course, title=f"Intro Video for {course.title}", video_url=video_url)
+
+            return redirect('course_list')
     else:
         form = CourseForm()
-
-    return render(request, 'courses/course_add.html', {'form': form})
+    return render(request, 'courses/course_form.html', {'form': form})
 
 
 @login_required
@@ -143,9 +155,16 @@ def enroll_course(request, course_id):
     else:
         return HttpResponseForbidden("You are not allowed to enroll in this course.")
 
+
 def course_detail(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
-    videos = course.videos.all()
+
+    # Check if the user is authenticated
+    if not request.user.is_authenticated:
+        return render(request, 'courses/login_required.html', {'course': course})
+
+    # If the user is logged in, show the course details
+    videos = course.videos.all()  # Assuming related_name='videos' in the Video model
     return render(request, 'courses/course_detail.html', {
         'course': course,
         'videos': videos
@@ -215,7 +234,64 @@ def course_intro(request, course_id):
     return render(request, 'courses/course_intro.html', {'course': course, 'is_enrolled': is_enrolled})
 
 def blog_view(request):
-    return render(request, 'training/blog.html')
+    return render(request, 'blogs/blog.html')
 
 def faq_view(request):
     return render(request, 'training/faq.html')
+
+def blog_list(request):
+    blogs = Blog.objects.all()  # Fetch all blog posts
+    return render(request, 'blogs/blog.html', {'blogs': blogs})
+
+@login_required
+def blog_detail(request, blog_id):
+    blog = get_object_or_404(Blog, id=blog_id)
+    return render(request, 'blogs/blog_detail.html', {'blog': blog})
+
+@login_required
+def blog_add(request):
+    if request.method == 'POST':
+        form = BlogForm(request.POST)
+        if form.is_valid():
+            blog = form.save(commit=False)
+            blog.author = request.user  # Assign the logged-in user as the author
+            blog.save()
+            return redirect('blog')  # Redirect to the blog list page
+    else:
+        form = BlogForm()
+    return render(request, 'blogs/blog_add.html', {'form': form})
+
+@login_required
+def blog_edit(request, blog_id):
+    blog = get_object_or_404(Blog, id=blog_id, author=request.user)
+    if request.method == 'POST':
+        form = BlogForm(request.POST, instance=blog)
+        if form.is_valid():
+            form.save()
+            return redirect('blog_list')
+    else:
+        form = BlogForm(instance=blog)
+    return render(request, 'blogs/blog_form.html', {'form': form})
+
+@login_required
+def blog_delete(request, blog_id):
+    blog = get_object_or_404(Blog, id=blog_id, author=request.user)
+    if request.method == 'POST':
+        blog.delete()
+        return redirect('blog_list')
+    return render(request, 'blogs/blog_confirm_delete.html', {'blog': blog})
+
+@login_required
+def video_add(request, course_id):
+    course = get_object_or_404(Course, id=course_id, trainer=request.user)  # Ensure the trainer owns the course
+
+    if request.method == 'POST':
+        form = VideoForm(request.POST)
+        if form.is_valid():
+            video = form.save(commit=False)
+            video.course = course  # Link the video to the course
+            video.save()
+            return redirect('course_detail', course_id=course.id)
+    else:
+        form = VideoForm()
+    return render(request, 'courses/video_form.html', {'form': form, 'course': course})

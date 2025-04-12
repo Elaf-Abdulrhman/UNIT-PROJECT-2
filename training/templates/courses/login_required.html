@@ -1,0 +1,17 @@
+{% extends "training/base.html" %}
+
+{% block title %}Login Required{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">{{ course.title }}</h1>
+    <p class="text-center">{{ course.description }}</p>
+    <div class="alert alert-warning text-center">
+        <strong>Access Restricted!</strong> You need to <a href="{% url 'login' %}" class="alert-link">log in</a> or <a href="{% url 'signup' %}" class="alert-link">sign up</a> to enroll in or view this course.
+    </div>
+    <div class="text-center mt-4">
+        <a href="{% url 'login' %}" class="btn btn-primary me-2">Log In</a>
+        <a href="{% url 'signup' %}" class="btn btn-secondary">Sign Up</a>
+    </div>
+</div>
+{% endblock %}

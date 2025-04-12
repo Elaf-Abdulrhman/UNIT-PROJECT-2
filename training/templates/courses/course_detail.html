@@ -24,6 +24,10 @@
     <!-- Main Content -->
     <div class="col-md-9">
 
+      {% if user.is_authenticated and user.role == 'trainer' and course.trainer == user %}
+        <a href="{% url 'video_add' course.id %}" class="btn btn-primary mb-3">Add Video</a>
+      {% endif %}
+
       {% for video in videos %}
         <div id="video{{ forloop.counter }}" class="video-section mb-5 {% if not forloop.first %}d-none{% endif %}">
           <h4>{{ video.title }}</h4>
