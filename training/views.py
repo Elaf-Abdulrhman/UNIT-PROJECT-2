@@ -313,5 +313,5 @@ def complete_course(request, course_id):
         course_name=course.title
     )
 
-    # Render the completion page
-    return render(request, 'courses/complete_course.html', {'course': course})
+    # Serve the certificate as a downloadable file
+    return FileResponse(open(certificate_path, 'rb'), as_attachment=True, filename=f'{course.title}_Certificate.png')
