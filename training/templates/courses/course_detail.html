@@ -5,23 +5,16 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h1 class="text-center mb-4">{{ course.title }}</h1>
-    <p class="text-center">{{ course.description }}</p>
+    <h1 class="text-center mb-4 fw-bold">{{ course.title }}</h1>
 
     <div class="row">
         <!-- Sidebar -->
         <div class="col-md-3">
-            <div class="list-group">
+            <div class="list-group shadow-sm">
                 {% for video in videos %}
                     <button class="list-group-item list-group-item-action {% if forloop.first %}active{% endif %}"
-                            data-index="{{ forloop.counter0 }}"
-                            {% if not video.id in watched_video_ids and forloop.counter0 > 1 %}disabled{% endif %}>
-                        {{ video.title }} -
-                        {% if video.id in watched_video_ids %}
-                            <span class="text-success">Watched</span>
-                        {% else %}
-                            <span class="text-danger">Not Watched</span>
-                        {% endif %}
+                            data-index="{{ forloop.counter0 }}">
+                        <span class="fw-bold">{{ video.title }}</span>
                     </button>
                 {% endfor %}
             </div>
@@ -31,7 +24,7 @@
         <div class="col-md-9">
             {% for video in videos %}
                 <div class="video-section {% if not forloop.first %}d-none{% endif %}" id="video-{{ forloop.counter0 }}">
-                    <h4>{{ video.title }}</h4>
+                    <h4 class="fw-bold">{{ video.title }}</h4>
                     <div class="ratio ratio-16x9 mb-3">
                         <iframe id="player{{ forloop.counter0 }}"
                                 class="youtube-player"
@@ -42,33 +35,31 @@
                                 allowfullscreen></iframe>
                     </div>
 
-                    <div class="d-flex justify-content-between mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
                         {% if not forloop.first %}
-                            <button class="btn btn-outline-primary prev-btn" data-index="{{ forloop.counter0 }}">Previous</button>
+                            <button class="btn btn-outline-primary prev-btn d-flex align-items-center" data-index="{{ forloop.counter0 }}">
+                                <i class="fas fa-arrow-left me-2"></i> Previous
+                            </button>
                         {% else %}
                             <div></div>
                         {% endif %}
                         {% if not forloop.last %}
-                            <button class="btn btn-outline-primary next-btn" data-index="{{ forloop.counter0 }}">Next</button>
+                            <button class="btn btn-outline-primary next-btn d-flex align-items-center" data-index="{{ forloop.counter0 }}">
+                                Next <i class="fas fa-arrow-right ms-2"></i>
+                            </button>
                         {% endif %}
                     </div>
+
+                    <!-- Certificate Button (Only After the Last Video) -->
+                    {% if forloop.last %}
+                        <div class="text-center mt-4">
+                            <a href="{% url 'complete_course' course.id %}" class="btn btn-success btn-lg">Download Certificate</a>
+                        </div>
+                    {% endif %}
                 </div>
             {% empty %}
-                <p>No videos available for this course.</p>
+                <div class="alert alert-warning text-center">No videos available for this course.</div>
             {% endfor %}
-
-            <!-- Progress Bar -->
-            <div class="progress mt-4">
-                <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="{{ videos|length }}">
-                    <span id="progress-text">0/{{ videos|length }}</span>
-                </div>
-            </div>
-
-            {% if watched_videos == total_videos %}
-                <div class="text-center mt-4">
-                    <a href="{% url 'complete_course' course.id %}" class="btn btn-success">Download Certificate</a>
-                </div>
-            {% endif %}
         </div>
     </div>
 </div>
@@ -76,74 +67,13 @@
 <!-- YouTube API -->
 <script src="https://www.youtube.com/iframe_api"></script>
 
-<script type="application/json" id="video-data">
-    {
-        "watchedCount": {{ watched_videos|default:0 }},
-        "totalVideos": {{ videos|length }}
-    }
-</script>
-
 <script>
     let players = [];
     const csrfToken = '{{ csrf_token }}';
-    const videoData = JSON.parse(document.getElementById('video-data').textContent);
-    let watchedCount = videoData.watchedCount;
-    const totalVideos = videoData.totalVideos;
-
-    function updateProgressBar() {
-        const progressBar = document.getElementById('progress-bar');
-        const progressText = document.getElementById('progress-text');
-        const progressPercentage = (watchedCount / totalVideos) * 100;
-        progressBar.style.width = `${progressPercentage}%`;
-        progressText.textContent = `${watchedCount}/${totalVideos}`;
-    }
 
     function onYouTubeIframeAPIReady() {
         document.querySelectorAll('.youtube-player').forEach((iframe, index) => {
-            players[index] = new YT.Player(iframe.id, {
-                events: {
-                    'onStateChange': function (event) {
-                        console.log(`State changed: ${event.data}`);
-                        if (event.data === YT.PlayerState.ENDED) {
-                            markVideoAsWatched(index);
-                        }
-                    }
-                }
-            });
-        });
-    }
-
-    function markVideoAsWatched(index) {
-        const videoId = document.querySelector(`#player${index}`).dataset.videoId;
-
-        fetch(`/videos/${videoId}/mark_watched/`, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': csrfToken,
-                'Content-Type': 'application/json',
-            }
-        }).then(response => {
-            if (response.ok) {
-                console.log(`Marked video ${videoId} as watched`);
-                watchedCount++;
-                updateProgressBar();
-
-                const nextBtn = document.querySelector(`.next-btn[data-index='${index}']`);
-                const nextSidebarBtn = document.querySelector(`.list-group-item[data-index='${index + 1}']`);
-                if (nextBtn) nextBtn.removeAttribute('disabled');
-                if (nextSidebarBtn) nextSidebarBtn.removeAttribute('disabled');
-
-                const currentBtn = document.querySelector(`.list-group-item[data-index='${index}']`);
-                const statusSpan = currentBtn.querySelector("span");
-                if (statusSpan) {
-                    statusSpan.classList.replace('text-danger', 'text-success');
-                    statusSpan.textContent = 'Watched';
-                }
-            } else {
-                console.error('Failed to mark video as watched');
-            }
-        }).catch(error => {
-            console.error('Error marking watched:', error);
+            players[index] = new YT.Player(iframe.id);
         });
     }
 
@@ -160,9 +90,7 @@
 
         sidebarButtons.forEach((btn, index) => {
             btn.addEventListener("click", () => {
-                if (!btn.hasAttribute('disabled')) {
-                    showVideo(index);
-                }
+                showVideo(index);
             });
         });
 
@@ -179,8 +107,6 @@
                 showVideo(index - 1);
             });
         });
-
-        updateProgressBar();
     });
 </script>
 {% endblock %}

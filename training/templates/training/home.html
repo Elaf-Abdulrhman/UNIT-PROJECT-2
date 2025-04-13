@@ -18,9 +18,10 @@
     <div class="modal-content">
       <div class="modal-body p-0">
         <div class="ratio ratio-16x9">
-          <iframe id="youtubeVideo" src="" 
-                  data-src="https://www.youtube.com/embed/F1f6VO7Slhk" 
-                  title="YouTube video" allowfullscreen></iframe>
+          <video id="localVideo" class="w-100" controls>
+            <source src="{% static 'videos/intro.mp4' %}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
         </div>
       </div>
     </div>
