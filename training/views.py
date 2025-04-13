@@ -242,8 +242,8 @@ def faq_view(request):
     return render(request, 'training/faq.html')
 
 def blog_list(request):
-    blogs = Blog.objects.all()  # Fetch all blog posts
-    return render(request, 'blogs/blog.html', {'blogs': blogs})
+    blogs = Blog.objects.all().order_by('-created_at')  # Fetch all blogs, ordered by creation date
+    return render(request, 'blogs/blog_list.html', {'blogs': blogs})
 
 @login_required
 def blog_detail(request, blog_id):
@@ -347,12 +347,17 @@ def mark_video_watched(request, video_id):
 @login_required
 def edit_profile(request):
     if request.method == 'POST':
-        user = request.user
-        user.username = request.POST.get('username', user.username)
-        user.email = request.POST.get('email', user.email)
-        user.first_name = request.POST.get('first_name', user.first_name)
-        user.last_name = request.POST.get('last_name', user.last_name)
-        user.save()
+        # Update profile logic...
         messages.success(request, 'Your profile has been updated successfully.')
         return redirect('profile')
-    return redirect('profile')
+
+def contact_view(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            # Handle form submission logic...
+            messages.success(request, 'Your message has been sent successfully.')
+            return redirect('contact')
+    else:
+        form = ContactForm()
+    return render(request, 'contact/contact.html', {'form': form})

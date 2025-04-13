@@ -23,7 +23,7 @@ PetroTrain is a platform that connects trainers and employees in the oil and gas
 - [UML Diagram](link-to-uml-diagram-file)
 
 ### Wireframe
-- [Wireframe](link-to-wireframe-file)
+- [Wireframe](https://www.canva.com/design/DAGkeyb3keQ/dm0OLEGtOpQ9T8EjPTukEQ/edit?utm_content=DAGkeyb3keQ&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
 ## Example Use Cases
 

@@ -36,6 +36,8 @@ urlpatterns = [
     path('faq/', views.faq_view, name='faq'),
     path('blog/', views.blog_list, name='blog'),
     path('blog/add/', views.blog_add, name='blog_add'),
+    path('blogs/<int:blog_id>/', views.blog_detail, name='blog_detail'),
+    path('blogs/', views.blog_list, name='blog_list'),  # Add this line
 ]
 
 if settings.DEBUG:
