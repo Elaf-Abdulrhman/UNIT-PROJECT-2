@@ -16,6 +16,7 @@ PetroTrain is a platform that connects trainers and employees in the oil and gas
 - Secure authentication and authorization.
 - Intuitive user interface with Bootstrap styling.
 
+##UML Use Case : (https://www.canva.com/design/DAGkfUmbvgM/FPEx8tZpNO60Nw0qWM1PDw/edit?utm_content=DAGkfUmbvgM&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 ### Wireframe
 - [Wireframe](https://www.canva.com/design/DAGkeyb3keQ/dm0OLEGtOpQ9T8EjPTukEQ/edit?utm_content=DAGkeyb3keQ&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
