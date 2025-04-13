@@ -167,15 +167,9 @@ def course_detail(request, course_id):
     course = get_object_or_404(Course, id=course_id)
     videos = course.videos.all()
 
-    # Get watched video IDs
-    watched_video_ids = VideoProgress.objects.filter(user=request.user, video__in=videos, watched=True).values_list('video_id', flat=True)
-
     return render(request, 'courses/course_detail.html', {
         'course': course,
         'videos': videos,
-        'watched_video_ids': watched_video_ids,
-        'watched_videos': len(watched_video_ids),
-        'total_videos': videos.count()
     })
 
 def services(request):
@@ -314,13 +308,6 @@ def complete_course(request, course_id):
 
     # Check if all videos are watched
     videos = course.videos.all()
-    watched_videos = VideoProgress.objects.filter(user=request.user, video__in=videos, watched=True).count()
-
-    if watched_videos < videos.count():
-        return render(request, 'courses/complete_course.html', {
-            'course': course,
-            'message': "You must watch all videos to download the certificate."
-        })
 
     # Generate the certificate
     certificate_path = generate_certificate(
@@ -342,11 +329,6 @@ def watch_video(request, video_id):
     if not enrollment:
         return redirect('course_detail', course_id=course.id)
 
-    # Mark the video as watched
-    progress, created = VideoProgress.objects.get_or_create(user=request.user, video=video)
-    progress.watched = True
-    progress.save()
-
     return render(request, 'courses/watch_video.html', {'video': video, 'course': course})
 
 
@@ -361,3 +343,16 @@ def mark_video_watched(request, video_id):
         return JsonResponse({'status': 'success', 'watched': True})
     except Video.DoesNotExist:
         return JsonResponse({'status': 'error', 'message': 'Video not found'}, status=404)
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        user = request.user
+        user.username = request.POST.get('username', user.username)
+        user.email = request.POST.get('email', user.email)
+        user.first_name = request.POST.get('first_name', user.first_name)
+        user.last_name = request.POST.get('last_name', user.last_name)
+        user.save()
+        messages.success(request, 'Your profile has been updated successfully.')
+        return redirect('profile')
+    return redirect('profile')

@@ -18,7 +18,7 @@ class CustomUser(AbstractUser):
 
 # Course Model
 class Course(models.Model):
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=255)
     description = models.TextField()
     trainer = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -27,8 +27,8 @@ class Course(models.Model):
     )
     start_date = models.DateField()
     end_date = models.DateField()
-    image = models.ImageField(upload_to='course_images/', null=True, blank=True)
-    video_url = models.URLField(null=True, blank=True)  # Optional video URL field
+    image = models.ImageField(upload_to='course_images/', blank=True, null=True)
+    video_url = models.URLField(blank=True, null=True)  # Optional video URL field
 
     def __str__(self):
         return self.title

@@ -7,11 +7,60 @@
 
 {% block content %}
 <div class="container mt-5">
+    <!-- Welcome Section -->
     <div class="text-center mb-5">
         <h2 class="fw-bold">Welcome, {{ user.username }}</h2>
+        <p class="text-muted">Manage your profile and explore your courses below.</p>
         <hr class="w-25 mx-auto">
     </div>
 
+    <!-- Edit Profile Button -->
+    <div class="text-end mb-4">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+            <i class="fas fa-user-edit"></i> Edit Profile Info
+        </button>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProfileModalLabel">Edit Profile Info</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" action="{% url 'edit_profile' %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="first_name" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="last_name" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enrolled Courses Section -->
     {% if user.role == 'employee' %}
         <h3 class="mb-4">Your Enrolled Courses</h3>
         {% if enrollments %}
@@ -20,15 +69,15 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card h-100 shadow-sm border-0">
                         {% if enrollment.course.image %}
-                        <img src="{{ enrollment.course.image.url }}" class="card-img-top" alt="{{ enrollment.course.title }}">
+                        <img src="{{ enrollment.course.image.url }}" class="card-img-top rounded-top" alt="{{ enrollment.course.title }}">
                         {% else %}
-                        <img src="{% static 'images/default.png' %}" class="card-img-top" alt="Default Image">
+                        <img src="{% static 'images/default.png' %}" class="card-img-top rounded-top" alt="Default Image">
                         {% endif %}
                         <div class="card-body">
-                            <h5 class="card-title">{{ enrollment.course.title }}</h5>
+                            <h5 class="card-title text-truncate">{{ enrollment.course.title }}</h5>
                             <p class="card-text text-muted small">{{ enrollment.course.description|truncatewords:20 }}</p>
                         </div>
-                        <div class="card-footer bg-white border-0 text-end">
+                        <div class="card-footer bg-light border-0 text-end">
                             <a href="{% url 'course_detail' enrollment.course.id %}" class="btn btn-outline-primary btn-sm">View Course</a>
                         </div>
                     </div>
@@ -39,6 +88,7 @@
             <div class="alert alert-info">You are not enrolled in any courses yet.</div>
         {% endif %}
 
+    <!-- Created Courses Section -->
     {% elif user.role == 'trainer' %}
         <h3 class="mb-4">Courses You Created</h3>
         {% if created_courses %}
@@ -47,15 +97,15 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card h-100 shadow-sm border-0">
                         {% if course.image %}
-                        <img src="{{ course.image.url }}" class="card-img-top" alt="{{ course.title }}">
+                        <img src="{{ course.image.url }}" class="card-img-top rounded-top" alt="{{ course.title }}">
                         {% else %}
-                        <img src="{% static 'images/default.png' %}" class="card-img-top" alt="Default Image">
+                        <img src="{% static 'images/default.png' %}" class="card-img-top rounded-top" alt="Default Image">
                         {% endif %}
                         <div class="card-body">
-                            <h5 class="card-title">{{ course.title }}</h5>
+                            <h5 class="card-title text-truncate">{{ course.title }}</h5>
                             <p class="card-text text-muted small">{{ course.description|truncatewords:20 }}</p>
                         </div>
-                        <div class="card-footer bg-white border-0 text-end">
+                        <div class="card-footer bg-light border-0 text-end">
                             <a href="{% url 'course_detail' course.id %}" class="btn btn-outline-secondary btn-sm">Manage Course</a>
                         </div>
                     </div>
